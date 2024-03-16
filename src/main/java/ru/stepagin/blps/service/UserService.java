@@ -19,7 +19,7 @@ public class UserService {
     public UserLoginContext login(String login, String password) {
         UserEntity u = userRepository.findByLoginAndPassword(login, password);
         if (u == null) {
-            return new UserLoginContext();
+            throw new IllegalArgumentException("invalid username or password");
         } else {
             return new UserLoginContext(u);
         }
