@@ -18,7 +18,7 @@ public class IssueService {
 
     public IssueEntity createIssue(IssueEntity issue, Long authorId) {
         // Check if title is not empty
-        if(issue.getTitle() == null || issue.getTitle().isEmpty()) {
+        if (issue.getTitle() == null || issue.getTitle().isEmpty()) {
             throw new IllegalArgumentException("Issue title cannot be empty");
         }
 
@@ -33,10 +33,19 @@ public class IssueService {
     }
 
     public IssueEntity getIssueById(Long issueId) {
-        return issueRepository.findById(issueId).orElse(null);
+        try {
+            return issueRepository.findById(issueId).orElse(null);
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Internal error while finding issue");
+        }
     }
 
     public void deleteIssueById(Long issueId) {
-        issueRepository.deleteById(issueId);
+        try {
+            issueRepository.deleteById(issueId);
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Internal error while deleting issue");
+        }
+
     }
 }
