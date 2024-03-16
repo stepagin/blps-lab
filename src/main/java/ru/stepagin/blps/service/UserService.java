@@ -29,6 +29,16 @@ public class UserService {
         if (user.getLogin() == null || user.getNickname() == null || user.getPassword() == null) {
             throw new IllegalArgumentException("Login, nickname, and password are required for registration");
         }
+        if (user.getLogin().length() > 255) {
+            throw new IllegalArgumentException("Login cannot be longer than 255 symbols");
+        }
+        if (user.getNickname().length() > 255) {
+            throw new IllegalArgumentException("Nickname cannot be longer than 255 symbols");
+        }
+        if (user.getPassword().length() > 255) {
+            throw new IllegalArgumentException("Password cannot be longer than 255 symbols");
+        }
+
         // Check if login is unique
         if (userRepository.existsByLogin(user.getLogin())) {
             throw new IllegalArgumentException("Login is already taken");

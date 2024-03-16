@@ -2,6 +2,7 @@ package ru.stepagin.blps.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.stepagin.blps.DTO.IssueData;
 import ru.stepagin.blps.entity.IssueEntity;
 import ru.stepagin.blps.entity.IssueTagEntity;
 import ru.stepagin.blps.repository.IssueRepository;
@@ -18,18 +19,23 @@ public class SearchService {
     @Autowired
     private IssueTagRepository issueTagRepository;
 
-    public List<IssueEntity> searchIssuesByTitle(String title) {
-        return issueRepository.findByTitleContainingIgnoreCase(title);
+    public List<IssueData> searchIssuesByTitle(String title) {
+        List<IssueEntity> issueEntities = issueRepository.findByTitleContainingIgnoreCase(title);
+        List<IssueData> issueDataList = new ArrayList<>();
+        for (IssueEntity ie : issueEntities) {
+            issueDataList.add(new IssueData(ie));
+        }
+        return issueDataList;
     }
 
-    public List<IssueEntity> searchIssuesByTags(List<String> tags) {
-        List<IssueEntity> issues = new ArrayList<>();
+    public List<IssueData> searchIssuesByTags(List<String> tags) {
+        List<IssueData> issues = new ArrayList<>();
 
         for (String tagName : tags) {
             List<IssueTagEntity> issueTags = issueTagRepository.findByTag_Name(tagName); //findIssueTagEntitiesByTag_Name(tagName);
 
             for (IssueTagEntity issueTag : issueTags) {
-                issues.add(issueTag.getIssue());
+                issues.add(new IssueData(issueTag.getIssue()));
             }
         }
 

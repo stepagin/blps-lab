@@ -30,4 +30,10 @@ public class IssueContext {
         this.setError("");
         this.setIssue(new IssueData(issue));
     }
+
+    public IssueContext(IssueData issue) {
+        this.setSuccess(true);
+        this.setError("");
+        this.setIssue(issue);
+    }
 }

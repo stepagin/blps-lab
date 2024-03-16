@@ -3,7 +3,6 @@ package ru.stepagin.blps.DTO;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import ru.stepagin.blps.entity.IssueEntity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,11 +21,7 @@ public class ManyIssuesContext {
         this.setIssues(new ArrayList<>());
     }
 
-    public ManyIssuesContext(List<IssueEntity> issueEntityList) {
-        List<IssueData> issueDataList = new ArrayList<>();
-        for (IssueEntity ie : issueEntityList) {
-            issueDataList.add(new IssueData(ie));
-        }
+    public ManyIssuesContext(List<IssueData> issueDataList) {
         this.setSuccess(true);
         this.setError("");
         this.setIssues(issueDataList);
