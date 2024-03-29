@@ -2,7 +2,7 @@ package ru.stepagin.blps.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.stepagin.blps.DTO.UserLoginContext;
+import ru.stepagin.blps.DTO.UserData;
 import ru.stepagin.blps.entity.UserEntity;
 import ru.stepagin.blps.repository.UserRepository;
 
@@ -16,16 +16,16 @@ public class UserService {
         return userRepository.findById(userId).orElse(null);
     }
 
-    public UserLoginContext login(String login, String password) {
+    public UserData login(String login, String password) {
         UserEntity u = userRepository.findByLoginAndPassword(login, password);
         if (u == null) {
             throw new IllegalArgumentException("invalid username or password");
         } else {
-            return new UserLoginContext(u);
+            return new UserData(u);
         }
     }
 
-    public UserLoginContext register(UserEntity user) {
+    public UserData register(UserEntity user) {
         if (user.getLogin() == null || user.getNickname() == null || user.getPassword() == null) {
             throw new IllegalArgumentException("Login, nickname, and password are required for registration");
         }
@@ -50,7 +50,7 @@ public class UserService {
         }
 
         // Additional logic for registration can be added here
-        return new UserLoginContext(userRepository.save(user));
+        return new UserData(userRepository.save(user));
     }
 }
 

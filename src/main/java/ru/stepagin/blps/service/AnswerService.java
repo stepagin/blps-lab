@@ -2,8 +2,7 @@ package ru.stepagin.blps.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.stepagin.blps.DTO.AnswerContext;
-import ru.stepagin.blps.DTO.ManyAnswersContext;
+import ru.stepagin.blps.DTO.AnswerData;
 import ru.stepagin.blps.entity.AnswerEntity;
 import ru.stepagin.blps.entity.IssueEntity;
 import ru.stepagin.blps.entity.UserEntity;
@@ -11,6 +10,7 @@ import ru.stepagin.blps.repository.AnswerRepository;
 import ru.stepagin.blps.repository.IssueRepository;
 import ru.stepagin.blps.repository.UserRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -29,12 +29,17 @@ public class AnswerService {
         return answerRepository.findById(answerId).orElse(null);
     }
 
-    public ManyAnswersContext getAnswersByIssueId(Long issueId) {
-        List<AnswerEntity> answerEntities = answerRepository.findByIssue_Id(issueId);
-        return new ManyAnswersContext(answerEntities);
+    public List<AnswerData> getAnswersByIssueId(Long issueId) {
+        List<AnswerEntity> answerEntityList = answerRepository.findByIssue_Id(issueId);
+
+        List<AnswerData> answerDataList = new ArrayList<>();
+        for (AnswerEntity ae : answerEntityList) {
+            answerDataList.add(new AnswerData(ae));
+        }
+        return answerDataList;
     }
 
-    public AnswerContext createAnswer(AnswerEntity answer, Long issueId, Long authorId) {
+    public AnswerData createAnswer(AnswerEntity answer, Long issueId, Long authorId) {
         // Check if text is not empty
         if (answer.getText() == null || answer.getText().isEmpty()) {
             throw new IllegalArgumentException("Answer text cannot be empty");
@@ -52,7 +57,7 @@ public class AnswerService {
         answer.setIssue(issue);
         answer.setAuthor(author);
 
-        return new AnswerContext(answerRepository.save(answer));
+        return new AnswerData(answerRepository.save(answer));
     }
 
     public void deleteAnswer(Long answerId) {

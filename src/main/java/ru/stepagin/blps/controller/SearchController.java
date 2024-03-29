@@ -4,36 +4,35 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.stepagin.blps.DTO.IssueData;
-import ru.stepagin.blps.DTO.ManyIssuesContext;
 import ru.stepagin.blps.service.SearchService;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/search")
+@RequestMapping("/api/questions/search")
 @CrossOrigin
 public class SearchController {
 
     @Autowired
     private SearchService searchService;
 
-    @GetMapping("/issuesByTitle")
-    public ResponseEntity<ManyIssuesContext> searchIssuesByTitle(@RequestParam String title) {
+    @GetMapping("/by-title")
+    public ResponseEntity<?> searchIssuesByTitle(@RequestParam String title) {
         try {
             List<IssueData> issues = searchService.searchIssuesByTitle(title);
-            return ResponseEntity.ok(new ManyIssuesContext(issues));
+            return ResponseEntity.ok(issues);
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(new ManyIssuesContext(e.getMessage()));
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
-    @GetMapping("/issuesByTags")
-    public ResponseEntity<ManyIssuesContext> searchIssuesByTags(@RequestParam List<String> tags) {
+    @GetMapping("/by-tags")
+    public ResponseEntity<?> searchIssuesByTags(@RequestParam List<String> tags) {
         try {
             List<IssueData> issues = searchService.searchIssuesByTags(tags);
-            return ResponseEntity.ok(new ManyIssuesContext(issues));
+            return ResponseEntity.ok(issues);
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(new ManyIssuesContext(e.getMessage()));
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 }

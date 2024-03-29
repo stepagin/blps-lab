@@ -24,6 +24,7 @@ public class IssueEntity {
     private String title;
 
     @Column(nullable = false)
+    @Lob
     private String description;
 
     @Column(nullable = false, columnDefinition = "DATE")

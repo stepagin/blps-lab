@@ -1,9 +1,8 @@
 package ru.stepagin.blps.DTO;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import lombok.*;
 import ru.stepagin.blps.entity.AnswerEntity;
 
 @Getter
@@ -14,6 +13,8 @@ public class AnswerData {
     private Long id;
     private UserData author;
     private IssueData issue;
+    @Size(max = 8000)
+    @NotNull
     private String text;
 
     public AnswerData(AnswerEntity answer) {

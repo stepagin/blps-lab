@@ -9,6 +9,8 @@ import ru.stepagin.blps.repository.IssueRepository;
 import ru.stepagin.blps.repository.UserRepository;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class IssueService {
@@ -21,11 +23,17 @@ public class IssueService {
 
     public IssueData createIssue(IssueData issue, Long authorId) {
         // Check if title is not empty
-        if (issue.getTitle() == null || issue.getTitle().isEmpty()) {
+        if (issue.getTitle().isEmpty()) {
             throw new IllegalArgumentException("Issue title cannot be empty");
         }
         if (issue.getTitle().length() > 255) {
             throw new IllegalArgumentException("Issue title cannot be longer than 255 symbols");
+        }
+        if (issue.getDescription().isEmpty()) {
+            throw new IllegalArgumentException("Description title cannot be empty");
+        }
+        if (issue.getDescription().length() > 8000) {
+            throw new IllegalArgumentException("Description title cannot be longer than 8000 symbols");
         }
 
         // Find author
@@ -44,7 +52,7 @@ public class IssueService {
         try {
             IssueEntity issue = issueRepository.findById(issueId).orElse(null);
             if (issue == null) {
-                return new IssueData();
+                return null;
             }
             return new IssueData(issue);
         } catch (Exception e) {
@@ -59,5 +67,18 @@ public class IssueService {
             throw new IllegalArgumentException("Internal error while deleting issue");
         }
 
+    }
+
+    public List<IssueData> getAll() {
+        try {
+            List<IssueEntity> issueEntities = issueRepository.findAll();
+            List<IssueData> issueDataList = new ArrayList<>();
+            for (IssueEntity ie : issueEntities) {
+                issueDataList.add(new IssueData(ie));
+            }
+            return issueDataList;
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Internal error while getting issues");
+        }
     }
 }

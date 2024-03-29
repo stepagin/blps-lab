@@ -12,12 +12,10 @@ import ru.stepagin.blps.entity.UserEntity;
 @RequiredArgsConstructor
 public class UserData {
     private Long id;
-    private String login;
     private String nickname;
 
     public UserData(UserEntity u) {
         this.setId(u.getId());
-        this.setLogin(u.getLogin());
         this.setNickname(u.getNickname());
     }
 }

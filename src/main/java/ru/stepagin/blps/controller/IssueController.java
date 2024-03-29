@@ -3,12 +3,13 @@ package ru.stepagin.blps.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.stepagin.blps.DTO.IssueContext;
 import ru.stepagin.blps.DTO.IssueData;
 import ru.stepagin.blps.service.IssueService;
 
+import java.util.List;
+
 @RestController
-@RequestMapping("/issue")
+@RequestMapping("/api/issue")
 @CrossOrigin
 public class IssueController {
 
@@ -16,27 +17,25 @@ public class IssueController {
     private IssueService issueService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<IssueContext> getIssueById(@PathVariable Long id) {
+    public ResponseEntity<?> getIssueById(@PathVariable Long id) {
         try {
-            IssueData issue = issueService.getIssueById(id);
-            return ResponseEntity.ok(new IssueContext(issue));
+            return ResponseEntity.ok(issueService.getIssueById(id));
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(new IssueContext(e.getMessage()));
+            return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(new IssueContext("Internal error while finding issue"));
+            return ResponseEntity.badRequest().body("Internal error while finding issue");
         }
 
     }
 
-    @PostMapping("/create")
-    public ResponseEntity<IssueContext> createIssue(@RequestBody IssueData issue, @RequestParam Long authorId) {
+    @PostMapping()
+    public ResponseEntity<?> createIssue(@RequestBody IssueData issue, @RequestParam Long authorId) {
         try {
-            IssueData createdIssue = issueService.createIssue(issue, authorId);
-            return ResponseEntity.ok(new IssueContext(createdIssue));
+            return ResponseEntity.ok(issueService.createIssue(issue, authorId));
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(new IssueContext(e.getMessage()));
+            return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(new IssueContext("Internal error while creating issue"));
+            return ResponseEntity.badRequest().body("Internal error while creating issue");
         }
     }
 
@@ -50,6 +49,19 @@ public class IssueController {
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Internal error while deleting issue");
         }
+    }
+
+    @GetMapping
+    public ResponseEntity<?> getAllIssues() {
+        try {
+            List<IssueData> issueDataList = issueService.getAll();
+            return ResponseEntity.ok(issueDataList);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Internal error while deleting issue");
+        }
+
     }
 }
 

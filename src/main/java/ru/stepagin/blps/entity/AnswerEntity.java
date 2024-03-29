@@ -26,6 +26,7 @@ public class AnswerEntity {
     @JoinColumn(name = "issue_id", nullable = false)
     private IssueEntity issue;
     
-    @Column(nullable = false, columnDefinition = "TEXT")
+    @Column(nullable = false)
+    @Lob
     private String text;
 }
