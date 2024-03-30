@@ -16,18 +16,6 @@ public class IssueController {
     @Autowired
     private IssueService issueService;
 
-    @GetMapping("/{id}")
-    public ResponseEntity<?> getIssueById(@PathVariable Long id) {
-        try {
-            return ResponseEntity.ok(issueService.getIssueById(id));
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Internal error while finding issue");
-        }
-
-    }
-
     @PostMapping()
     public ResponseEntity<?> createIssue(@RequestBody IssueData issue, @RequestParam Long authorId) {
         try {
