@@ -5,6 +5,9 @@ import ru.stepagin.blps.entity.UserEntity;
 
 public interface UserRepository extends JpaRepository<UserEntity, Long> {
     boolean existsByNickname(String nickname);
+
     boolean existsByLogin(String login);
+
     UserEntity findByLoginAndPassword(String login, String password);
+
 }

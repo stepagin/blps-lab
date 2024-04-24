@@ -1,6 +1,7 @@
 package ru.stepagin.blps.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -25,8 +26,8 @@ public class AnswerEntity {
     @ManyToOne
     @JoinColumn(name = "issue_id", nullable = false)
     private IssueEntity issue;
-    
+
     @Column(nullable = false)
-    @Lob
+    @Size(max = 8000)
     private String text;
 }

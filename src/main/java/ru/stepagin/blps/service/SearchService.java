@@ -21,14 +21,11 @@ public class SearchService {
 
     public List<IssueData> searchIssuesByTitle(String title) {
         List<IssueEntity> issueEntities = issueRepository.findByTitleContainingIgnoreCase(title);
-        List<IssueData> issueDataList = new ArrayList<>();
-        for (IssueEntity ie : issueEntities) {
-            issueDataList.add(new IssueData(ie));
-        }
-        return issueDataList;
+        return issueEntities.stream().map(IssueData::new).toList();
     }
 
     public List<IssueData> searchIssuesByTags(List<String> tags) {
+        // такой метод надо либо удалить, либо допилить
         List<IssueData> issues = new ArrayList<>();
 
         for (String tagName : tags) {

@@ -18,37 +18,19 @@ public class IssueController {
 
     @PostMapping()
     public ResponseEntity<?> createIssue(@RequestBody IssueData issue, @RequestParam Long authorId) {
-        try {
-            return ResponseEntity.ok(issueService.createIssue(issue, authorId));
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Internal error while creating issue");
-        }
+        return ResponseEntity.ok(issueService.createIssue(issue, authorId));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteIssueById(@PathVariable Long id) {
-        try {
-            issueService.deleteIssueById(id);
-            return ResponseEntity.ok("Issue deleted successfully");
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Internal error while deleting issue");
-        }
+        issueService.deleteIssueById(id);
+        return ResponseEntity.ok("Issue deleted successfully");
     }
 
     @GetMapping
     public ResponseEntity<?> getAllIssues() {
-        try {
-            List<IssueData> issueDataList = issueService.getAll();
-            return ResponseEntity.ok(issueDataList);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Internal error while deleting issue");
-        }
+        List<IssueData> issueDataList = issueService.getAll();
+        return ResponseEntity.ok(issueDataList);
 
     }
 }

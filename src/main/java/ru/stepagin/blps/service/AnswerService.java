@@ -3,15 +3,13 @@ package ru.stepagin.blps.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.stepagin.blps.DTO.AnswerData;
+import ru.stepagin.blps.DTO.IssueData;
 import ru.stepagin.blps.entity.AnswerEntity;
 import ru.stepagin.blps.entity.IssueEntity;
 import ru.stepagin.blps.entity.UserEntity;
+import ru.stepagin.blps.exception.InvalidIdSuppliedException;
 import ru.stepagin.blps.repository.AnswerRepository;
-import ru.stepagin.blps.repository.IssueRepository;
 import ru.stepagin.blps.repository.UserRepository;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 public class AnswerService {
@@ -20,40 +18,31 @@ public class AnswerService {
     private AnswerRepository answerRepository;
 
     @Autowired
-    private IssueRepository issueRepository;
+    private IssueService issueService;
 
     @Autowired
     private UserRepository userRepository;
 
-    public AnswerEntity getAnswerById(Long answerId) {
-        return answerRepository.findById(answerId).orElse(null);
+    public AnswerData getAnswerById(Long answerId) {
+        AnswerEntity answerEntity = answerRepository.findById(answerId).orElseThrow(() -> new InvalidIdSuppliedException("No answer with this id was found"));
+        return new AnswerData(answerEntity);
     }
 
-    public List<AnswerData> getAnswersByIssueId(Long issueId) {
-        List<AnswerEntity> answerEntityList = answerRepository.findByIssue_Id(issueId);
-
-        List<AnswerData> answerDataList = new ArrayList<>();
-        for (AnswerEntity ae : answerEntityList) {
-            answerDataList.add(new AnswerData(ae));
-        }
-        return answerDataList;
+    public IssueData getAnswersByIssueId(Long issueId) {
+        IssueData issue = issueService.getIssueById(issueId);
+        return new IssueData(issue, answerRepository.findByIssue_Id(issueId).stream().map(AnswerData::new).toList());
     }
 
     public AnswerData createAnswer(AnswerEntity answer, Long issueId, Long authorId) {
-        // Check if text is not empty
         if (answer.getText() == null || answer.getText().isEmpty()) {
             throw new IllegalArgumentException("Answer text cannot be empty");
         }
 
-        // Find issue by id
-        IssueEntity issue = issueRepository.findById(issueId)
-                .orElseThrow(() -> new IllegalArgumentException("Issue not found"));
+        IssueEntity issue = issueService.findIssueEntityById(issueId);
 
-        // Check if author exists and is authenticated
         UserEntity author = userRepository.findById(authorId)
                 .orElseThrow(() -> new IllegalArgumentException("Author not found"));
 
-        // Additional logic for answer creation can be added here
         answer.setIssue(issue);
         answer.setAuthor(author);
 
@@ -61,6 +50,9 @@ public class AnswerService {
     }
 
     public void deleteAnswer(Long answerId) {
+        if (!answerRepository.existsById(answerId)) {
+            throw new InvalidIdSuppliedException("No answer with this id was found");
+        }
         answerRepository.deleteById(answerId);
     }
 }

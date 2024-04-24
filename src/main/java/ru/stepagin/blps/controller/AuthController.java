@@ -17,21 +17,13 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestParam String login, @RequestParam String password) {
-        try {
-            UserData user = userService.login(login, password);
-            return ResponseEntity.ok(user);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+        UserData user = userService.login(login, password);
+        return ResponseEntity.ok(user);
     }
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody UserEntity user) {
-        try {
-            UserData registeredUser = userService.register(user);
-            return ResponseEntity.ok(registeredUser);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+        UserData registeredUser = userService.register(user);
+        return ResponseEntity.ok(registeredUser);
     }
 }

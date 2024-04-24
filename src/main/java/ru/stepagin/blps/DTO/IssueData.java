@@ -1,7 +1,10 @@
 package ru.stepagin.blps.DTO;
 
 import jakarta.validation.constraints.Size;
-import lombok.*;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 import ru.stepagin.blps.entity.IssueEntity;
 
 import java.time.LocalDateTime;
@@ -14,10 +17,8 @@ import java.util.List;
 public class IssueData {
     private Long id;
     @Size(max = 255)
-    @NonNull
     private String title;
     @Size(max = 8000)
-    @NonNull
     private String description;
     private LocalDateTime date;
     private UserData author;

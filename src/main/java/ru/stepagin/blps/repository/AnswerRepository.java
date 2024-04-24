@@ -7,5 +7,4 @@ import java.util.List;
 
 public interface AnswerRepository extends JpaRepository<AnswerEntity, Long> {
     List<AnswerEntity> findByIssue_Id(Long id);
-
 }

@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
@@ -27,10 +28,17 @@ public class IssueEntity {
     @Lob
     private String description;
 
+    @CreationTimestamp
     @Column(nullable = false, columnDefinition = "DATE")
-    private LocalDateTime date;
+    private LocalDateTime date = LocalDateTime.now();
 
     @ManyToOne
     @JoinColumn(name = "author_id", nullable = false)
     private UserEntity author;
+
+    public IssueEntity(String title, String description, UserEntity author) {
+        this.title = title;
+        this.description = description;
+        this.author = author;
+    }
 }
