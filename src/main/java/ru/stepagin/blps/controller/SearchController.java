@@ -1,33 +1,30 @@
 package ru.stepagin.blps.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.stepagin.blps.DTO.IssueData;
+import ru.stepagin.blps.dto.IssueDto;
 import ru.stepagin.blps.service.SearchService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/questions/search")
+@RequestMapping("${api.endpoints.base-url}/questions") // TODO: переместить в обычный get: /issues с пагинацией
 @CrossOrigin
 @RequiredArgsConstructor
 public class SearchController {
-
-    @Autowired
     private final SearchService searchService;
 
-    @GetMapping("/by-title")
-    public ResponseEntity<?> searchIssuesByTitle(@RequestParam String title) {
-        List<IssueData> issues = searchService.searchIssuesByTitle(title);
-        return ResponseEntity.ok(issues);
-    }
+    @Operation(description = "Производит поиск по названию и тегам")
+    @GetMapping
+    public ResponseEntity<List<IssueDto>> searchIssuesByTitle(@RequestParam(name = "title") String title,
+                                                              @RequestParam(name = "tags") List<String> tags) {
 
-    @GetMapping("/by-tags")
-    public ResponseEntity<?> searchIssuesByTags(@RequestParam List<String> tags) {
-        List<IssueData> issues = searchService.searchIssuesByTags(tags);
-        return ResponseEntity.ok(issues);
+//        List<IssueDto> issues = searchService.search(title, tags);
+//        return ResponseEntity.ok(issues);
+        return ResponseEntity.ok(new ArrayList<>());
     }
 }
 

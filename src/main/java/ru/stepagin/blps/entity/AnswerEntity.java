@@ -1,11 +1,13 @@
 package ru.stepagin.blps.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "answer")
@@ -27,7 +29,11 @@ public class AnswerEntity {
     @JoinColumn(name = "issue_id", nullable = false)
     private IssueEntity issue;
 
+    @Lob
     @Column(nullable = false)
-    @Size(max = 8000)
     private String text;
+
+    @CreationTimestamp
+    @Column(name = "date", nullable = false, updatable = false, columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
+    private LocalDateTime date = LocalDateTime.now();
 }

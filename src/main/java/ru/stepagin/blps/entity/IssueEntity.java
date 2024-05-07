@@ -24,16 +24,16 @@ public class IssueEntity {
     @Column(nullable = false)
     private String title;
 
-    @Column(nullable = false)
     @Lob
+    @Column(nullable = false)
     private String description;
 
     @CreationTimestamp
-    @Column(nullable = false, columnDefinition = "DATE")
+    @Column(nullable = false, updatable = false, columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
     private LocalDateTime date = LocalDateTime.now();
 
     @ManyToOne
-    @JoinColumn(name = "author_id", nullable = false)
+    @JoinColumn(name = "author_id", updatable = false, nullable = false)
     private UserEntity author;
 
     public IssueEntity(String title, String description, UserEntity author) {

@@ -1,37 +1,53 @@
 package ru.stepagin.blps.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import io.swagger.v3.oas.annotations.Operation;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.stepagin.blps.DTO.IssueData;
+import ru.stepagin.blps.dto.IssueDto;
+import ru.stepagin.blps.entity.UserEntity;
+import ru.stepagin.blps.security.SecurityService;
 import ru.stepagin.blps.service.IssueService;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/issue")
+@RequestMapping("${api.endpoints.base-url}/issues")
 @CrossOrigin
+@RequiredArgsConstructor
 public class IssueController {
+    private final IssueService issueService;
+    private final SecurityService securityService;
 
-    @Autowired
-    private IssueService issueService;
-
-    @PostMapping()
-    public ResponseEntity<?> createIssue(@RequestBody IssueData issue, @RequestParam Long authorId) {
-        return ResponseEntity.ok(issueService.createIssue(issue, authorId));
+    @Operation(description = "Создать вопрос")
+    @PostMapping
+    public ResponseEntity<?> createIssue(@RequestBody @Validated IssueDto issue, Authentication authentication) {
+        UserEntity user = securityService.getUser(authentication);
+        return ResponseEntity.ok(issueService.createIssue(issue, user));
     }
 
+    @Operation(description = "Показать все вопросы")
+    @GetMapping
+    public ResponseEntity<?> getAllIssues() {
+        List<IssueDto> issueDtoList = issueService.getAll();
+        return ResponseEntity.ok(issueDtoList);
+    }
+
+    @Operation(description = "Показать вопрос")
+    @GetMapping("/{id}")
+    public ResponseEntity<IssueDto> getIssueById(@PathVariable Long id) {
+        return ResponseEntity.ok(issueService.getIssueById(id));
+    }
+
+    @Operation(description = "Удалить вопрос")
     @DeleteMapping("/{id}")
+    @PreAuthorize("@securityService.isIssueOwner(#id, authentication)")
     public ResponseEntity<String> deleteIssueById(@PathVariable Long id) {
         issueService.deleteIssueById(id);
         return ResponseEntity.ok("Issue deleted successfully");
-    }
-
-    @GetMapping
-    public ResponseEntity<?> getAllIssues() {
-        List<IssueData> issueDataList = issueService.getAll();
-        return ResponseEntity.ok(issueDataList);
-
     }
 }
 

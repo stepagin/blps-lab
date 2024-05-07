@@ -1,46 +1,55 @@
 package ru.stepagin.blps.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import io.swagger.v3.oas.annotations.Operation;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-import ru.stepagin.blps.DTO.AnswerData;
-import ru.stepagin.blps.DTO.IssueData;
-import ru.stepagin.blps.entity.AnswerEntity;
+import ru.stepagin.blps.dto.AnswerDto;
+import ru.stepagin.blps.dto.IssueDto;
+import ru.stepagin.blps.entity.UserEntity;
 import ru.stepagin.blps.service.AnswerService;
 import ru.stepagin.blps.service.IssueService;
 
 @RestController
-@RequestMapping("/api/issue/{issueId}")
+@RequestMapping("${api.endpoints.base-url}/issues/{issueId}/answers")
 @CrossOrigin
+@RequiredArgsConstructor
 public class AnswerController {
-    @Autowired
-    private AnswerService answerService;
-    @Autowired
-    private IssueService issueService;
+    private final AnswerService answerService;
+    private final IssueService issueService;
 
+    @Operation(description = "Показать ответы по id вопроса")
     @GetMapping
-    public ResponseEntity<IssueData> getAnswersByIssueId(@PathVariable Long issueId) {
-        IssueData result = answerService.getAnswersByIssueId(issueId);
-        return ResponseEntity.ok(result);
+    public ResponseEntity<IssueDto> getAnswersByIssueId(@PathVariable Long issueId) {
+        return ResponseEntity.ok(answerService.getAnswersByIssueId(issueId));
     }
 
-    @PostMapping("/answers")
-    public ResponseEntity<?> createAnswer(@PathVariable Long issueId, @RequestBody AnswerEntity answer, @RequestParam Long authorId) {
-        // TODO: get user by Authorization context (и в других запросах тоже)
-        AnswerData createdAnswer = answerService.createAnswer(answer, issueId, authorId);
-        return ResponseEntity.ok(createdAnswer);
+    @Operation(description = "Создать ответ")
+    @PostMapping
+    public ResponseEntity<AnswerDto> createAnswer(@PathVariable Long issueId,
+                                                  @RequestBody AnswerDto answer,
+                                                  Authentication authentication) {
+        // TODO: make it return Issue with this answer
+        // TODO: заменить заглушку
+        UserEntity user = (UserEntity) authentication.getPrincipal(); // заглушка
+
+        return ResponseEntity.ok(answerService.createAnswer(answer, issueId, user));
     }
 
-    @GetMapping("/answers/{id}")
-    public ResponseEntity<?> getAnswerById(@PathVariable Long issueId, @PathVariable Long id) {
-        AnswerData answer = answerService.getAnswerById(id);
-        return ResponseEntity.ok(answer);
+    @Operation(description = "Показать ответ по id")
+    @GetMapping("/{id}")
+    public ResponseEntity<AnswerDto> getAnswerById(@PathVariable Long issueId, @PathVariable Long id) {
+        return ResponseEntity.ok(answerService.getAnswerById(id));
     }
 
-    @DeleteMapping("/answers/{id}")
-    public ResponseEntity<String> deleteAnswer(@PathVariable Long issueId, @PathVariable Long id) {
+    @Operation(description = "Удалить ответ")
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteAnswer(@PathVariable Long issueId,
+                                               @PathVariable Long id,
+                                               Authentication authentication) {
         answerService.deleteAnswer(id);
-        return ResponseEntity.ok("Answer deleted successfully");
+        return ResponseEntity.noContent().build();
     }
 }
 

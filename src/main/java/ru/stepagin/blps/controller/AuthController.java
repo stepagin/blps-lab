@@ -1,29 +1,25 @@
 package ru.stepagin.blps.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import io.swagger.v3.oas.annotations.Operation;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.stepagin.blps.DTO.UserData;
-import ru.stepagin.blps.entity.UserEntity;
+import ru.stepagin.blps.dto.PersonDto;
+import ru.stepagin.blps.dto.RegistrationDto;
 import ru.stepagin.blps.service.UserService;
 
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("${api.endpoints.base-url}/auth")
 @CrossOrigin
+@RequiredArgsConstructor
 public class AuthController {
+    private final UserService userService;
 
-    @Autowired
-    private UserService userService;
-
-    @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestParam String login, @RequestParam String password) {
-        UserData user = userService.login(login, password);
-        return ResponseEntity.ok(user);
-    }
-
+    @Operation(description = "Создаёт пользователя")
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody UserEntity user) {
-        UserData registeredUser = userService.register(user);
+    public ResponseEntity<?> register(@RequestBody @Validated RegistrationDto user) {
+        PersonDto registeredUser = userService.register(user);
         return ResponseEntity.ok(registeredUser);
     }
 }

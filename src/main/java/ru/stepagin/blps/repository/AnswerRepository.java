@@ -6,5 +6,5 @@ import ru.stepagin.blps.entity.AnswerEntity;
 import java.util.List;
 
 public interface AnswerRepository extends JpaRepository<AnswerEntity, Long> {
-    List<AnswerEntity> findByIssue_Id(Long id);
+    List<AnswerEntity> findByIssueId(Long id);
 }
