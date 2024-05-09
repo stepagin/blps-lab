@@ -1,5 +1,7 @@
 package ru.stepagin.blps.service;
 
+import bitronix.tm.BitronixTransactionManager;
+import bitronix.tm.TransactionManagerServices;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,6 +14,7 @@ import ru.stepagin.blps.mapper.IssueMapper;
 import ru.stepagin.blps.repository.AnswerRepository;
 import ru.stepagin.blps.repository.IssueRepository;
 
+import javax.transaction.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,11 +36,24 @@ public class IssueService {
         return IssueMapper.toDto(issue, answerRepository.findByIssueId(issueId));
     }
 
-    @Transactional
     public void deleteIssueById(Long issueId) {
-        if (!issueRepository.existsById(issueId))
-            throw new IssueNotFoundException(issueId.toString());
-        issueRepository.deleteById(issueId);
+        BitronixTransactionManager btm = TransactionManagerServices.getTransactionManager();
+        try {
+            btm.begin();
+            answerRepository.deleteByIssueId(issueId);
+            if (!issueRepository.existsById(issueId)) {
+                btm.rollback();
+                throw new IssueNotFoundException(issueId.toString());
+            }
+            issueRepository.deleteById(issueId);
+            btm.commit();
+        } catch (NotSupportedException |
+                 SystemException |
+                 HeuristicRollbackException |
+                 HeuristicMixedException |
+                 RollbackException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public List<IssueDto> getAll() {
