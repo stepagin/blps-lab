@@ -9,6 +9,8 @@ import ru.stepagin.blps.dto.PersonDto;
 import ru.stepagin.blps.dto.RegistrationDto;
 import ru.stepagin.blps.service.UserService;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("${api.endpoints.base-url}/auth")
 @CrossOrigin
@@ -16,10 +18,16 @@ import ru.stepagin.blps.service.UserService;
 public class AuthController {
     private final UserService userService;
 
-    @Operation(description = "Создаёт пользователя")
+    @Operation(description = "Создать пользователя")
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody @Validated RegistrationDto user) {
         PersonDto registeredUser = userService.register(user);
         return ResponseEntity.ok(registeredUser);
+    }
+
+    @Operation(description = "Показать зарегистрированных пользователей")
+    @GetMapping
+    public ResponseEntity<List<PersonDto>> getAllUsers() {
+        return ResponseEntity.ok(userService.getAllUsers());
     }
 }

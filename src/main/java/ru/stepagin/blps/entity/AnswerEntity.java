@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.Length;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
@@ -29,11 +30,16 @@ public class AnswerEntity {
     @JoinColumn(name = "issue_id", nullable = false)
     private IssueEntity issue;
 
-    @Lob
-    @Column(nullable = false)
+    @Column(nullable = false, length = Length.LONG)
     private String text;
 
     @CreationTimestamp
     @Column(name = "date", nullable = false, updatable = false, columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
     private LocalDateTime date = LocalDateTime.now();
+
+    public AnswerEntity(String text, UserEntity author, IssueEntity issue) {
+        this.text = text;
+        this.author = author;
+        this.issue = issue;
+    }
 }

@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import ru.stepagin.blps.entity.UserEntity;
 import ru.stepagin.blps.repository.UserRepository;
+import ru.stepagin.blps.service.AnswerService;
 import ru.stepagin.blps.service.IssueService;
 
 @Service
@@ -14,6 +15,7 @@ import ru.stepagin.blps.service.IssueService;
 public class SecurityService {
     private final UserRepository userRepository;
     private final IssueService issueService;
+    private final AnswerService answerService;
 
     public UserEntity getUser(Authentication authentication) {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
@@ -24,5 +26,10 @@ public class SecurityService {
     public boolean isIssueOwner(Long issueId, Authentication authentication) {
         UserEntity user = getUser(authentication);
         return issueService.isIssueOwner(issueId, user);
+    }
+
+    public boolean isAnswerOwner(Long answerId, Authentication authentication) {
+        UserEntity user = getUser(authentication);
+        return answerService.isAnswerOwner(answerId, user);
     }
 }

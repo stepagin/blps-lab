@@ -2,7 +2,9 @@ package ru.stepagin.blps.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.stepagin.blps.dto.AnswerDto;
+import ru.stepagin.blps.dto.CreateAnswerDto;
 import ru.stepagin.blps.dto.IssueDto;
 import ru.stepagin.blps.entity.AnswerEntity;
 import ru.stepagin.blps.entity.IssueEntity;
@@ -12,6 +14,8 @@ import ru.stepagin.blps.mapper.AnswerMapper;
 import ru.stepagin.blps.mapper.IssueMapper;
 import ru.stepagin.blps.repository.AnswerRepository;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class AnswerService {
@@ -19,22 +23,20 @@ public class AnswerService {
     private final IssueService issueService;
 
     public AnswerDto getAnswerById(Long answerId) {
-        AnswerEntity answerEntity = answerRepository.findById(answerId).orElseThrow(() -> new InvalidIdSuppliedException("No answer with this id was found"));
+        AnswerEntity answerEntity = answerRepository.findById(answerId)
+                .orElseThrow(() -> new InvalidIdSuppliedException("No answer with this id was found"));
         return AnswerMapper.toDto(answerEntity);
     }
 
-    public IssueDto getAnswersByIssueId(Long issueId) {
-        IssueEntity issue = issueService.getIssueEntityById(issueId);
-        return IssueMapper.toDto(issue, answerRepository.findByIssueId(issueId));
+    @Transactional
+    public List<AnswerDto> getAnswersByIssueId(Long issueId) {
+        return AnswerMapper.toDto(answerRepository.findByIssueId(issueId));
     }
 
-    public AnswerDto createAnswer(AnswerDto answerDto, Long issueId, UserEntity author) {
-        AnswerEntity answer = new AnswerEntity();
-        answer.setText(answerDto.getText());
-        answer.setAuthor(author);
+    public IssueDto createAnswer(CreateAnswerDto answer, Long issueId, UserEntity author) {
         IssueEntity issue = issueService.getIssueEntityById(issueId);
-        answer.setIssue(issue);
-        return AnswerMapper.toDto(answerRepository.save(answer));
+        AnswerEntity answerEntity = new AnswerEntity(answer.getText(), author, issue);
+        return IssueMapper.toDto(issue, List.of(answerRepository.save(answerEntity)));
     }
 
     public void deleteAnswer(Long answerId) {
@@ -42,6 +44,10 @@ public class AnswerService {
             throw new InvalidIdSuppliedException("No answer with this id was found");
         }
         answerRepository.deleteById(answerId);
+    }
+
+    public boolean isAnswerOwner(Long answerId, UserEntity user) {
+        return answerRepository.existsByIdAndAuthor(answerId, user);
     }
 }
 

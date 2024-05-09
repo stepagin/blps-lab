@@ -7,6 +7,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import ru.stepagin.blps.dto.CreateIssueDto;
 import ru.stepagin.blps.dto.IssueDto;
 import ru.stepagin.blps.entity.UserEntity;
 import ru.stepagin.blps.security.SecurityService;
@@ -24,14 +25,15 @@ public class IssueController {
 
     @Operation(description = "Создать вопрос")
     @PostMapping
-    public ResponseEntity<?> createIssue(@RequestBody @Validated IssueDto issue, Authentication authentication) {
+    public ResponseEntity<IssueDto> createIssue(@RequestBody @Validated CreateIssueDto issue,
+                                                Authentication authentication) {
         UserEntity user = securityService.getUser(authentication);
         return ResponseEntity.ok(issueService.createIssue(issue, user));
     }
 
     @Operation(description = "Показать все вопросы")
     @GetMapping
-    public ResponseEntity<?> getAllIssues() {
+    public ResponseEntity<List<IssueDto>> getAllIssues() {
         List<IssueDto> issueDtoList = issueService.getAll();
         return ResponseEntity.ok(issueDtoList);
     }

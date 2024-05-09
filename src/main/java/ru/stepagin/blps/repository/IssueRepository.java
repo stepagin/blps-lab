@@ -14,7 +14,7 @@ import java.util.List;
 public interface IssueRepository extends JpaRepository<IssueEntity, Long> {
     List<IssueEntity> findByTitleContainingIgnoreCase(String title);
 
-    @Query("select i from IssueEntity i where i.id = :id and i.author = :author")
-    IssueEntity findByIdAndAuthor(@Param("id") @NonNull Long id, @Param("author") @NonNull UserEntity author);
+    @Query("select (count(i) > 0) from IssueEntity i where i.id = :id and i.author = :author")
+    boolean existsByIdAndAuthor(@Param("id") @NonNull Long id, @Param("author") @NonNull UserEntity author);
 }
 
