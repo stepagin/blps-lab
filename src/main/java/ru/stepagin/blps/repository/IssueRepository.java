@@ -8,12 +8,8 @@ import org.springframework.stereotype.Repository;
 import ru.stepagin.blps.entity.IssueEntity;
 import ru.stepagin.blps.entity.UserEntity;
 
-import java.util.List;
-
 @Repository
 public interface IssueRepository extends JpaRepository<IssueEntity, Long> {
-    List<IssueEntity> findByTitleContainingIgnoreCase(String title);
-
     @Query("select (count(i) > 0) from IssueEntity i where i.id = :id and i.author = :author")
     boolean existsByIdAndAuthor(@Param("id") @NonNull Long id, @Param("author") @NonNull UserEntity author);
 }

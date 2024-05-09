@@ -50,8 +50,7 @@ public class AnswerController {
     @DeleteMapping("/{id}")
     @PreAuthorize("@securityService.isAnswerOwner(#id, authentication)")
     public ResponseEntity<String> deleteAnswer(@PathVariable Long issueId,
-                                               @PathVariable Long id,
-                                               Authentication authentication) {
+                                               @PathVariable Long id) {
         answerService.deleteAnswer(id);
         return ResponseEntity.noContent().build();
     }

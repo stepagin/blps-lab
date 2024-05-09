@@ -15,4 +15,8 @@ public interface AnswerRepository extends JpaRepository<AnswerEntity, Long> {
 
     @Query("select (count(a) > 0) from AnswerEntity a where a.id = :id and a.author = :author")
     boolean existsByIdAndAuthor(@Param("id") Long id, @Param("author") UserEntity author);
+
+    void deleteByIssueId(Long issueId);
+
+
 }
