@@ -1,13 +1,14 @@
 package ru.stepagin.blps.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import ru.stepagin.blps.security.Role;
 import ru.stepagin.blps.security.SecurityConfiguration;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "account")
@@ -23,9 +24,12 @@ public class UserEntity {
     @Column(nullable = false)
     private String nickname;
 
+    private Set<Role> roles = new HashSet<>();
+    
     public UserEntity(String login, String passwordNotEncoded, String nickname) {
         this.login = login;
         this.password = SecurityConfiguration.passwordEncoder().encode(passwordNotEncoded);
         this.nickname = nickname;
+        this.roles.add(Role.USER);
     }
 }
