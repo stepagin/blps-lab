@@ -11,6 +11,7 @@ import ru.stepagin.blps.dto.CreateIssueDto;
 import ru.stepagin.blps.dto.IssueDto;
 import ru.stepagin.blps.entity.UserEntity;
 import ru.stepagin.blps.security.SecurityService;
+import ru.stepagin.blps.service.AuthService;
 import ru.stepagin.blps.service.IssueService;
 
 import java.util.List;
@@ -21,13 +22,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class IssueController {
     private final IssueService issueService;
-    private final SecurityService securityService;
+    private final AuthService authService;
 
     @Operation(description = "Создать вопрос")
     @PostMapping
-    public ResponseEntity<IssueDto> createIssue(@RequestBody @Validated CreateIssueDto issue,
-                                                Authentication authentication) {
-        UserEntity user = securityService.getUser(authentication);
+    public ResponseEntity<IssueDto> createIssue(@RequestBody @Validated CreateIssueDto issue) {
+        UserEntity user = authService.getAuthenticatedUser();
         return ResponseEntity.ok(issueService.createIssue(issue, user));
     }
 
@@ -46,7 +46,7 @@ public class IssueController {
 
     @Operation(description = "Удалить вопрос")
     @DeleteMapping("/{id}")
-    @PreAuthorize("@securityService.isIssueOwner(#id, authentication)")
+    @PreAuthorize("@securityService.canEditIssue(#id)")
     public ResponseEntity<String> deleteIssueById(@PathVariable Long id) {
         issueService.deleteIssueById(id);
         return ResponseEntity.ok("Issue deleted successfully");
