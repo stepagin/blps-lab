@@ -1,7 +1,5 @@
 package ru.stepagin.blps.service;
 
-import bitronix.tm.BitronixTransactionManager;
-import bitronix.tm.TransactionManagerServices;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,7 +15,6 @@ import ru.stepagin.blps.repository.IssueRepository;
 import ru.stepagin.blps.repository.IssueTagRepository;
 import ru.stepagin.blps.repository.TagRepository;
 
-import javax.transaction.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,24 +45,12 @@ public class IssueService {
     }
 
     public void deleteIssueById(Long issueId) {
-        BitronixTransactionManager btm = TransactionManagerServices.getTransactionManager();
-        try {
-            btm.begin();
-            issueTagRepository.deleteByIssue(issueId);
-            answerRepository.deleteByIssueId(issueId);
-            if (!issueRepository.existsById(issueId)) {
-                btm.rollback();
-                throw new IssueNotFoundException(issueId.toString());
-            }
-            issueRepository.deleteById(issueId);
-            btm.commit();
-        } catch (NotSupportedException |
-                 SystemException |
-                 HeuristicRollbackException |
-                 HeuristicMixedException |
-                 RollbackException e) {
-            throw new RuntimeException(e);
+        if (!issueRepository.existsById(issueId)) {
+            throw new IssueNotFoundException(issueId.toString());
         }
+        issueTagRepository.deleteByIssueId(issueId);
+        answerRepository.deleteByIssueId(issueId);
+        issueRepository.deleteById(issueId);
     }
 
     protected IssueEntity getIssueEntityById(Long issueId) {

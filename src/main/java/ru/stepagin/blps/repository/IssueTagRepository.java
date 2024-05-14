@@ -25,7 +25,7 @@ public interface IssueTagRepository extends JpaRepository<IssueTagEntity, Long> 
     @Transactional
     @Modifying
     @Query("delete from IssueTagEntity i where i.issue.id = :issueId")
-    void deleteByIssue(Long issueId);
+    void deleteByIssueId(Long issueId);
 
     @Query("select " +
             "i.issue as issue, array_agg (i.tag.name) within group (order by i.tag.name) as tags " +
