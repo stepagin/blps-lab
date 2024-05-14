@@ -36,7 +36,7 @@ public class AnswerService {
     public IssueDto createAnswer(CreateAnswerDto answer, Long issueId, UserEntity author) {
         IssueEntity issue = issueService.getIssueEntityById(issueId);
         AnswerEntity answerEntity = new AnswerEntity(answer.getText(), author, issue);
-        return IssueMapper.toDto(issue, List.of(answerRepository.save(answerEntity)));
+        return IssueMapper.toDto(issue, List.of(answerRepository.save(answerEntity)), issueService.getTagsByIssueId(issueId));
     }
 
     public void deleteAnswer(Long answerId) {

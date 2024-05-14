@@ -19,4 +19,8 @@ public class TagEntity {
     @Column(nullable = false, unique = true)
     private String name;
     private String description;
+
+    public TagEntity(String name) {
+        this.name = name;
+    }
 }
