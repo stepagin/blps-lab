@@ -6,7 +6,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.web.ErrorResponse;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -20,76 +20,86 @@ import java.util.Objects;
 @Hidden
 public class ExceptionHandlerService {
 
-    @ResponseStatus(value = HttpStatus.FORBIDDEN, reason = "Пользователь не авторизован")
+    @ResponseStatus(HttpStatus.FORBIDDEN)
     @ExceptionHandler(AccessDeniedException.class)
-    public ErrorResponse handleException(final AccessDeniedException e) {
-        log.error("AccessDeniedException: {}", e.getMessage());
-        // TODO: сделать собственную DTO для ошибок и поставить её везде
-        return ErrorResponse.builder(e, HttpStatus.FORBIDDEN, e.getMessage()).build();
+    public ResponseEntity<ExceptionResponse> handleException(final AccessDeniedException e) {
+        ExceptionResponse exceptionResponse = ExceptionResponse.forbidden(e.getMessage());
+        log.error("[{}] AccessDeniedException: {}", exceptionResponse.getId(), e.getMessage());
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(exceptionResponse);
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ErrorResponse handleException(final MethodArgumentNotValidException e) {
-        log.error("MethodArgumentNotValidException: {}", e.getMessage());
-        String responseMessage = Arrays.stream(Objects.requireNonNull(e.getDetailMessageArguments())).toList().get(1).toString();
-        return ErrorResponse.builder(e, HttpStatus.BAD_REQUEST, responseMessage).build();
+    public ResponseEntity<ExceptionResponse> handleException(final MethodArgumentNotValidException e) {
+        final String message = Arrays.stream(Objects.requireNonNull(e.getDetailMessageArguments())).toList().get(1).toString();
+        ExceptionResponse exceptionResponse = ExceptionResponse.badRequest(message);
+        log.error("[{}] MethodArgumentNotValidException: {}", exceptionResponse.getId(), e.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exceptionResponse);
     }
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(DataIntegrityViolationException.class)
-    public ErrorResponse handleException(final DataIntegrityViolationException e) {
-        log.error("DataIntegrityViolationException: {}", e.getMessage());
-        String responseMessage = e.getMessage();
-        return ErrorResponse.builder(e, HttpStatus.INTERNAL_SERVER_ERROR, responseMessage).build();
+    public ResponseEntity<ExceptionResponse> handleException(final DataIntegrityViolationException e) {
+        ExceptionResponse exceptionResponse = ExceptionResponse.internalServerError(e.getMessage());
+        log.error("[{}] DataIntegrityViolationException: {}", exceptionResponse.getId(), e.getMessage());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(exceptionResponse);
     }
-//
-//    @ExceptionHandler(MethodArgumentNotValidException.class)
-//    public ResponseEntity<String> handleException(final MethodArgumentNotValidException e) {
-//        log.error("MethodArgumentNotValidException: {}", e.getMessage());
-//        return ResponseEntity.badRequest().body(e.getMessage());
-//    }
-//
-//    @ExceptionHandler(InvalidIdSuppliedException.class)
-//    public ResponseEntity<String> handleException(final InvalidIdSuppliedException e) {
-//        log.error("InvalidIdSuppliedException: {}", e.getMessage());
-//        return ResponseEntity.badRequest().body(e.getMessage());
-//    }
-//
-//    @ExceptionHandler(IssueNotFoundException.class)
-//    public ResponseEntity<String> handleException(final IssueNotFoundException e) {
-//        log.error("TopicNotFoundException: {}", e.getMessage());
-//        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-//    }
-//
-//    @ExceptionHandler(ValidationException.class)
-//    public ResponseEntity<String> handleException(final ValidationException e) {
-//        log.error("ValidationException: {}", e.getMessage());
-//        return ResponseEntity.unprocessableEntity().body(e.getMessage());
-//    }
-//
-//    @ExceptionHandler(IllegalArgumentException.class)
-//    public ResponseEntity<String> handleException(final IllegalArgumentException e) {
-//        log.error("IllegalArgumentException: {}", e.getMessage());
-//        return ResponseEntity.badRequest().body(e.getMessage());
-//    }
-//
-//    @ExceptionHandler(UnsupportedOperationException.class)
-//    public ResponseEntity<String> handleException(final UnsupportedOperationException e) {
-//        log.error("UnsupportedOperationException: {}", e.getMessage());
-//        return ResponseEntity.internalServerError().body(e.getMessage());
-//    }
-//
-//    @ExceptionHandler(RuntimeException.class)
-//    public ResponseEntity<String> handleException(final RuntimeException e) {
-//        log.error("Runtime Exception ({}): {}", e.getClass(), e.getMessage());
-//        return ResponseEntity.internalServerError().body(e.getMessage());
-//    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ExceptionResponse> handleException(final IllegalArgumentException e) {
+        ExceptionResponse exceptionResponse = ExceptionResponse.badRequest(e.getMessage());
+        log.error("[{}] IllegalArgumentException: {}", exceptionResponse.getId(), e.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exceptionResponse);
+    }
+
+    @ExceptionHandler(InvalidIdSuppliedException.class)
+    public ResponseEntity<ExceptionResponse> handleException(final InvalidIdSuppliedException e) {
+        ExceptionResponse exceptionResponse = ExceptionResponse.badRequest(e.getMessage());
+        log.error("[{}] InvalidIdSuppliedException: {}", exceptionResponse.getId(), e.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exceptionResponse);
+    }
+
+    @ExceptionHandler(IssueNotFoundException.class)
+    public ResponseEntity<ExceptionResponse> handleException(final IssueNotFoundException e) {
+        ExceptionResponse exceptionResponse = ExceptionResponse.notFound(e.getMessage());
+        log.error("[{}] TopicNotFoundException: {}", exceptionResponse.getId(), e.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exceptionResponse);
+    }
+
+    @ExceptionHandler(ValidationException.class)
+    public ResponseEntity<ExceptionResponse> handleException(final ValidationException e) {
+        ExceptionResponse exceptionResponse = ExceptionResponse.unprocessableEntity(e.getMessage());
+        log.error("[{}] ValidationException: {}", exceptionResponse.getId(), e.getMessage());
+        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(exceptionResponse);
+    }
+
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    public ResponseEntity<ExceptionResponse> handleException(final HttpRequestMethodNotSupportedException e) {
+        ExceptionResponse exceptionResponse = ExceptionResponse.badRequest(e.getMessage());
+        log.error("[{}] HttpRequestMethodNotSupportedException: {}", exceptionResponse.getId(), e.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exceptionResponse);
+    }
+
+    @ExceptionHandler(UnsupportedOperationException.class)
+    public ResponseEntity<ExceptionResponse> handleException(final UnsupportedOperationException e) {
+        ExceptionResponse exceptionResponse = ExceptionResponse.internalServerError(e.getMessage());
+        log.error("[{}] UnsupportedOperationException: {}", exceptionResponse.getId(), e.getMessage());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(exceptionResponse);
+    }
+
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<ExceptionResponse> handleException(final RuntimeException e) {
+        ExceptionResponse exceptionResponse = ExceptionResponse.internalServerError(e.getMessage());
+        log.error("[{}] Runtime Exception ({}): {}", exceptionResponse.getId(), e.getClass(), e.getMessage());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(exceptionResponse);
+    }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<String> handleException(final Exception e) {
+    public ResponseEntity<ExceptionResponse> handleException(final Exception e) {
+        ExceptionResponse exceptionResponse = ExceptionResponse.internalServerError(e.getMessage());
         log.error("Common Exception ({}): {}", e.getClass(), e.getMessage());
-        return ResponseEntity.internalServerError().body(e.getMessage());
+        e.printStackTrace();
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(exceptionResponse);
     }
 
 }
