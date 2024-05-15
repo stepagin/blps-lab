@@ -7,7 +7,10 @@ import lombok.Setter;
 import lombok.ToString;
 
 @Entity
-@Table(name = "issue_tag")
+@Table(name = "issue_tag",
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = {"issue_id", "tag_id"})
+        })
 @Getter
 @Setter
 @ToString
@@ -25,4 +28,9 @@ public class IssueTagEntity {
     @ManyToOne
     @JoinColumn(name = "tag_id", nullable = false)
     private TagEntity tag;
+
+    public IssueTagEntity(IssueEntity issue, TagEntity tag) {
+        this.issue = issue;
+        this.tag = tag;
+    }
 }

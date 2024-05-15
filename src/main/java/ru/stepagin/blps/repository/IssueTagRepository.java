@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import ru.stepagin.blps.entity.IssueEntity;
 import ru.stepagin.blps.entity.IssueTagEntity;
 import ru.stepagin.blps.entity.TagEntity;
 
@@ -38,7 +39,8 @@ public interface IssueTagRepository extends JpaRepository<IssueTagEntity, Long> 
     @Query("select i.tag from IssueTagEntity i where i.issue.id = :id")
     List<TagEntity> findByIssueId(@Param("id") Long id);
 
-
+    @Query("select (count(i) > 0) from IssueTagEntity i where i.issue = :issue and upper(i.tag.name) = upper(:name)")
+    boolean existsByIssueAndTagName(@Param("issue") IssueEntity issue, @Param("name") String name);
 }
 
 
