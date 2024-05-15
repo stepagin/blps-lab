@@ -24,7 +24,7 @@ public class AnswerService {
 
     public AnswerDto getAnswerById(Long answerId) {
         AnswerEntity answerEntity = answerRepository.findById(answerId)
-                .orElseThrow(() -> new InvalidIdSuppliedException("No answer with this id was found"));
+                .orElseThrow(() -> new InvalidIdSuppliedException("No answer with id=" + answerId + " was found"));
         return AnswerMapper.toDto(answerEntity);
     }
 
@@ -39,9 +39,12 @@ public class AnswerService {
         return IssueMapper.toDto(issue, List.of(answerRepository.save(answerEntity)), issueService.getTagsByIssueId(issueId));
     }
 
-    public void deleteAnswer(Long answerId) {
+    public void deleteAnswer(Long issueId, Long answerId) {
+        if (!issueService.existsById(issueId)) {
+            throw new InvalidIdSuppliedException("No issue with id=" + issueId + " was found");
+        }
         if (!answerRepository.existsById(answerId)) {
-            throw new InvalidIdSuppliedException("No answer with this id was found");
+            throw new InvalidIdSuppliedException("No answer with id=" + answerId + " was found");
         }
         answerRepository.deleteById(answerId);
     }

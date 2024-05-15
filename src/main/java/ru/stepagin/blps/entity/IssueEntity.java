@@ -33,7 +33,7 @@ public class IssueEntity {
     private LocalDateTime date = LocalDateTime.now();
 
     @ManyToOne
-    @JoinColumn(name = "author_id", updatable = false, nullable = false)
+    @JoinColumn(name = "author_id", nullable = false, updatable = false)
     private UserEntity author;
 
     public IssueEntity(String title, String description, UserEntity author) {

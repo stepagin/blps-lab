@@ -19,10 +19,6 @@ public abstract class IssueMapper {
         return issueDto;
     }
 
-    public static List<IssueDto> toDto(List<IssueEntity> issueEntities) {
-        return issueEntities.stream().map(IssueMapper::toDto).toList();
-    }
-
     public static IssueDto toDto(IssueEntity issueEntity, List<AnswerEntity> answerEntities) {
         IssueDto issueDto = IssueMapper.toDto(issueEntity);
         issueDto.setAnswers(AnswerMapper.toDto(answerEntities));

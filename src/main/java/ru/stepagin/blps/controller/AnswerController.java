@@ -10,7 +10,6 @@ import ru.stepagin.blps.dto.AnswerDto;
 import ru.stepagin.blps.dto.CreateAnswerDto;
 import ru.stepagin.blps.dto.IssueDto;
 import ru.stepagin.blps.entity.UserEntity;
-import ru.stepagin.blps.security.SecurityService;
 import ru.stepagin.blps.service.AnswerService;
 import ru.stepagin.blps.service.AuthService;
 
@@ -22,7 +21,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AnswerController {
     private final AnswerService answerService;
-    private final SecurityService securityService;
     private final AuthService authService;
 
     @Operation(description = "Показать ответы по id вопроса")
@@ -47,11 +45,11 @@ public class AnswerController {
     }
 
     @Operation(description = "Удалить ответ")
-    @DeleteMapping("/{id}")
-    @PreAuthorize("@securityService.canEditAnswer(#id)")
+    @DeleteMapping("/{answerId}")
+    @PreAuthorize("@securityService.canEditAnswer(#answerId)")
     public ResponseEntity<String> deleteAnswer(@PathVariable Long issueId,
-                                               @PathVariable Long id) {
-        answerService.deleteAnswer(id);
+                                               @PathVariable Long answerId) {
+        answerService.deleteAnswer(issueId, answerId);
         return ResponseEntity.noContent().build();
     }
 }

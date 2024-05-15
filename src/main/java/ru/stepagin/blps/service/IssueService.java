@@ -60,7 +60,7 @@ public class IssueService {
 
     public void deleteIssueById(Long issueId) {
         if (!issueRepository.existsById(issueId)) {
-            throw new IssueNotFoundException(issueId.toString());
+            throw new IssueNotFoundException("Issue not found: " + issueId);
         }
         issueTagRepository.deleteByIssueId(issueId);
         answerRepository.deleteByIssueId(issueId);
@@ -69,10 +69,14 @@ public class IssueService {
 
     protected IssueEntity getIssueEntityById(Long issueId) {
         return issueRepository.findById(issueId)
-                .orElseThrow(() -> new IssueNotFoundException(issueId.toString()));
+                .orElseThrow(() -> new IssueNotFoundException("Issue not found: " + issueId));
     }
 
     public boolean isIssueOwner(Long issueId, UserEntity user) {
         return issueRepository.existsByIdAndAuthor(issueId, user);
+    }
+
+    public boolean existsById(Long issueId) {
+        return issueRepository.existsById(issueId);
     }
 }

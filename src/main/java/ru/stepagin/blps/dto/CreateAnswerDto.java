@@ -5,11 +5,9 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.validation.annotation.Validated;
 
 @Getter
 @Setter
-@Validated
 public class CreateAnswerDto {
     @NotEmpty(message = "не должно быть пустым")
     @NotNull(message = "должно присутствовать")

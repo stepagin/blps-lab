@@ -5,12 +5,10 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import org.springframework.validation.annotation.Validated;
 
 @Getter
 @Setter
 @RequiredArgsConstructor
-@Validated
 public class RegistrationDto {
     @NotNull(message = "должно присутствовать")
     @Size(min = 4, max = 255, message = "длина должна быть от 4 до 255 символов")

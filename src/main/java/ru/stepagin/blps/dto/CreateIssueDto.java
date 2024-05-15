@@ -5,14 +5,12 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.validation.annotation.Validated;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Getter
 @Setter
-@Validated
 public class CreateIssueDto {
     @NotNull(message = "должно присутствовать")
     @NotEmpty(message = "не может быть пустым")
