@@ -6,10 +6,6 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-
 @Getter
 @Setter
 public class SubscriptionDto {
@@ -22,5 +18,11 @@ public class SubscriptionDto {
     private String tag;
     @NotNull(message = "должно присутствовать")
     @NotEmpty(message = "не может быть пустым")
-    private LocalDateTime notifyInterval;
+    private int notifyInterval;
+
+    public SubscriptionDto(String email, String tag, int days) {
+        this.email = email;
+        this.tag = tag;
+        this.notifyInterval = days;
+    }
 }

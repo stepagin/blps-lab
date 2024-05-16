@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "issue")
@@ -17,15 +19,19 @@ public class IssueEntity {
     @Column(name = "id")
     private Long id;
 
+    @Column(name = "title")
+    private String title;
+
     @Column(nullable = false)
-    private String tag;
+    @ElementCollection(targetClass = String.class, fetch = FetchType.EAGER)
+    private List<String> tags = new ArrayList<>();
 
     @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE", nullable = false)
     private LocalDateTime creationDate;
 
-    public IssueEntity(Long id, String tag, LocalDateTime creationDate) {
+    public IssueEntity(Long id, List<String> tags, LocalDateTime creationDate) {
         this.id = id;
-        this.tag = tag;
+        this.tags.addAll(tags);
         this.creationDate = creationDate;
     }
 }

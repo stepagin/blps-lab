@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.time.Period;
 
 @Entity
 @Table(name = "subscription")
@@ -25,15 +26,14 @@ public class SubscriptionEntity {
     private String tag;
 
     @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE", nullable = false)
-    private LocalDateTime notifyInterval;
+    private Period notifyInterval;
 
     @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE", nullable = false)
-    private LocalDateTime lastNotify;
+    private LocalDateTime lastNotify = LocalDateTime.now();
 
-    public SubscriptionEntity(String email, String tag, LocalDateTime notifyInterval, LocalDateTime lastNotify) {
+    public SubscriptionEntity(String email, String tag, int notifyInterval) {
         this.email = email;
         this.tag = tag;
-        this.lastNotify = lastNotify;
-        this.notifyInterval = notifyInterval;
+        this.notifyInterval = Period.ofDays(notifyInterval);
     }
 }

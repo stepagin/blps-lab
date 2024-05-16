@@ -6,18 +6,18 @@ import com.annyarusova.subscriptionservice.repository.SubscriptionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-
 
 @Service
 @RequiredArgsConstructor
 public class SubscriptionService {
     private final SubscriptionRepository subscriptionRepository;
 
-    public SubscriptionDto subscribe(SubscriptionDto subscriptionDto) {
-        var subscription = new SubscriptionEntity(subscriptionDto.getEmail(), subscriptionDto.getTag(), subscriptionDto.getNotifyInterval(), LocalDateTime.now());
+    // TODO настроить JWT авторизацию на этот метод, реализовать получение данных юзера по JWT
+    public SubscriptionDto subscribe(SubscriptionDto subDto) {
+        SubscriptionEntity subscription = new SubscriptionEntity(subDto.getEmail(), subDto.getTag(), subDto.getNotifyInterval());
+        // TODO почекать запись в БД, правильно ли зранятся данные
         subscriptionRepository.save(subscription);
-        return subscriptionDto;
+        return subDto;
     }
 }
 
