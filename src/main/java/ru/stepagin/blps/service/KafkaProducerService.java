@@ -9,14 +9,20 @@ import ru.stepagin.blps.dto.IssueDto;
 @Service
 @RequiredArgsConstructor
 public class KafkaProducerService {
-    private final KafkaTemplate<Long, IssueDto> kafkaTemplate;
+    private final KafkaTemplate<Long, IssueDto> issueKafkaTemplate;
+    private final KafkaTemplate<String, String> userKafkaTemplate;
     @Value(value = "${app.kafka.topic-names.issue}")
     private String issueTopicName;
     @Value(value = "${app.kafka.topic-names.user}")
     private String userTopicName;
 
     public void sendIssue(IssueDto issueDto) {
-        kafkaTemplate.send(issueTopicName, issueDto.getId(), issueDto);
-        kafkaTemplate.flush();
+        issueKafkaTemplate.send(issueTopicName, issueDto.getId(), issueDto);
+        issueKafkaTemplate.flush();
+    }
+
+    public void sendUser(String login, String event) {
+        userKafkaTemplate.send(userTopicName, login, event);
+        userKafkaTemplate.flush();
     }
 }
