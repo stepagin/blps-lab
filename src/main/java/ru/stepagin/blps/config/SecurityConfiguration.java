@@ -1,4 +1,4 @@
-package ru.stepagin.blps.security;
+package ru.stepagin.blps.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,6 +17,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import ru.stepagin.blps.security.JwtFilter;
+import ru.stepagin.blps.security.UserDetailService;
 
 @EnableWebSecurity
 @Configuration

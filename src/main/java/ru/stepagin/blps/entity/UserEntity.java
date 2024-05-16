@@ -7,8 +7,8 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import ru.stepagin.blps.config.SecurityConfiguration;
 import ru.stepagin.blps.security.Role;
-import ru.stepagin.blps.security.SecurityConfiguration;
 
 import java.util.HashSet;
 import java.util.Set;

@@ -27,6 +27,7 @@ public class IssueService {
     private final AnswerRepository answerRepository;
     private final IssueTagRepository issueTagRepository;
     private final TagRepository tagRepository;
+    private final KafkaProducerService kafkaProducerService;
 
     @Transactional
     public IssueDto createIssue(CreateIssueDto issue, UserEntity user) {
@@ -44,8 +45,9 @@ public class IssueService {
                 issueTagRepository.save(new IssueTagEntity(issueEntity, tagEntity));
             }
         }
-
-        return IssueMapper.toDto(issueEntity, new ArrayList<>(), issue.getTags());
+        IssueDto issueDto = IssueMapper.toDto(issueEntity, new ArrayList<>(), issue.getTags());
+        kafkaProducerService.sendIssue(issueDto);
+        return issueDto;
     }
 
     @Transactional

@@ -7,12 +7,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import ru.stepagin.blps.config.SecurityConfiguration;
 import ru.stepagin.blps.dto.JwtRequest;
 import ru.stepagin.blps.dto.JwtResponse;
 import ru.stepagin.blps.entity.UserEntity;
 import ru.stepagin.blps.security.JwtAuthentication;
 import ru.stepagin.blps.security.JwtProvider;
-import ru.stepagin.blps.security.SecurityConfiguration;
 
 import java.util.HashMap;
 import java.util.Map;
