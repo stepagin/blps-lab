@@ -17,8 +17,11 @@ public class SubscribeController {
 
     @Operation(description = "Подписаться на рассылку")
     @PostMapping
-    public ResponseEntity<SubscriptionDto> getAnswersByIssueId(@RequestBody @Validated SubscriptionDto subscription) {
+    public ResponseEntity<SubscriptionDto> subscribe(@RequestBody @Validated SubscriptionDto subscription) {
+        // TODO: по данным авторизации сохранить email в базу с пользователями. В БД с подпиской будут теги, id пользователя и остальное.
         return ResponseEntity.ok(subscriptionService.subscribe(subscription));
     }
+
+    // TODO: unsubscribe
 }
 

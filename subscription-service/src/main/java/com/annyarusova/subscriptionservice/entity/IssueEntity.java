@@ -28,10 +28,4 @@ public class IssueEntity {
 
     @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE", nullable = false)
     private LocalDateTime creationDate;
-
-    public IssueEntity(Long id, List<String> tags, LocalDateTime creationDate) {
-        this.id = id;
-        this.tags.addAll(tags);
-        this.creationDate = creationDate;
-    }
 }

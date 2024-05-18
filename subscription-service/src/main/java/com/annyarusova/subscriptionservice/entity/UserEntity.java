@@ -21,6 +21,12 @@ public class UserEntity {
     private String password;
     @Column(nullable = false)
     private String nickname;
-    @Column(nullable = false)
     private String email;
+
+    public UserEntity(String login, String password, String nickname) {
+        this.login = login;
+        this.password = password;
+        this.nickname = nickname;
+        this.email = null;
+    }
 }
