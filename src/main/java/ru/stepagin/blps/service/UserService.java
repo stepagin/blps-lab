@@ -23,7 +23,7 @@ public class UserService {
             throw new IllegalArgumentException("Логин " + data.getLogin() + " уже занят");
         UserEntity user = new UserEntity(data.getLogin(), data.getPassword(), data.getUsername());
         PersonDto personDto = PersonMapper.toDto(userRepository.save(user));
-        kafkaProducerService.sendUser(data.getLogin(), "register");
+        kafkaProducerService.sendUser(data.getLogin(), user);
         return personDto;
     }
 

@@ -11,6 +11,7 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
 import org.springframework.kafka.support.serializer.JsonSerializer;
 import ru.stepagin.blps.dto.IssueDto;
+import ru.stepagin.blps.entity.UserEntity;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,9 +23,16 @@ public class KafkaProducerConfiguration {
     private String kafkaServer;
 
     @Bean
-    public Map<String, Object> issueProducerConfigs() {
+    public Map<String, Object> producerConfigs() {
         Map<String, Object> props = new HashMap<>();
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaServer);
+        props.put(JsonSerializer.ADD_TYPE_INFO_HEADERS, false);
+        return props;
+    }
+
+    @Bean
+    public Map<String, Object> issueProducerConfigs() {
+        Map<String, Object> props = producerConfigs();
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, LongSerializer.class);
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
         return props;
@@ -32,30 +40,29 @@ public class KafkaProducerConfiguration {
 
     @Bean
     public Map<String, Object> userProducerConfigs() {
-        Map<String, Object> props = new HashMap<>();
-        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaServer);
+        Map<String, Object> props = producerConfigs();
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
-        props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
         return props;
     }
 
     @Bean
-    public ProducerFactory<Long, IssueDto> issueDtoProducerFactory() {
+    public ProducerFactory<Long, IssueDto> issueProducerFactory() {
         return new DefaultKafkaProducerFactory<>(issueProducerConfigs());
     }
 
     @Bean
-    public ProducerFactory<String, String> personDtoProducerFactory() {
+    public ProducerFactory<String, UserEntity> userProducerFactory() {
         return new DefaultKafkaProducerFactory<>(userProducerConfigs());
     }
 
     @Bean(name = "issue-kafka-template")
     public KafkaTemplate<Long, IssueDto> issueKafkaTemplate() {
-        return new KafkaTemplate<>(issueDtoProducerFactory());
+        return new KafkaTemplate<>(issueProducerFactory());
     }
 
     @Bean(name = "user-kafka-template")
-    public KafkaTemplate<String, String> userKafkaTemplate() {
-        return new KafkaTemplate<>(personDtoProducerFactory());
+    public KafkaTemplate<String, UserEntity> userKafkaTemplate() {
+        return new KafkaTemplate<>(userProducerFactory());
     }
 }
