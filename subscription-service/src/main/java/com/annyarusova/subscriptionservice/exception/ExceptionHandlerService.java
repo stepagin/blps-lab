@@ -45,6 +45,13 @@ public class ExceptionHandlerService {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(exceptionResponse);
     }
 
+    @ExceptionHandler(SubscriptionAlreadyExistsException.class)
+    public ResponseEntity<ExceptionResponse> handleException(final SubscriptionAlreadyExistsException e) {
+        ExceptionResponse exceptionResponse = ExceptionResponse.badRequest(e.getMessage());
+        log.error("[{}] SubscriptionAlreadyExistsException: {}", exceptionResponse.getId(), e.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exceptionResponse);
+    }
+
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ExceptionResponse> handleException(final IllegalArgumentException e) {
         ExceptionResponse exceptionResponse = ExceptionResponse.badRequest(e.getMessage());
@@ -77,7 +84,6 @@ public class ExceptionHandlerService {
     public ResponseEntity<ExceptionResponse> handleException(final Exception e) {
         ExceptionResponse exceptionResponse = ExceptionResponse.internalServerError(e.getMessage());
         log.error("Common Exception ({}): {}", e.getClass(), e.getMessage());
-        e.printStackTrace();
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(exceptionResponse);
     }
 

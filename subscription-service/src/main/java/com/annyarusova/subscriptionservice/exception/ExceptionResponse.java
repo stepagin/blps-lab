@@ -38,11 +38,4 @@ public class ExceptionResponse extends ProblemDetail {
         return new ExceptionResponse(message, HttpStatus.INTERNAL_SERVER_ERROR.value());
     }
 
-    public static ExceptionResponse notFound(String message) {
-        return new ExceptionResponse(message, HttpStatus.NOT_FOUND.value());
-    }
-
-    public static ExceptionResponse unprocessableEntity(String message) {
-        return new ExceptionResponse(message, HttpStatus.UNPROCESSABLE_ENTITY.value());
-    }
 }
