@@ -1,6 +1,7 @@
 package com.annyarusova.subscriptionservice.service;
 
 import com.annyarusova.subscriptionservice.dto.SubscriptionDto;
+import com.annyarusova.subscriptionservice.dto.UnsubscriptionDto;
 import com.annyarusova.subscriptionservice.entity.SubscriptionEntity;
 import com.annyarusova.subscriptionservice.entity.UserEntity;
 import com.annyarusova.subscriptionservice.exception.SubscriptionAlreadyExistsException;
@@ -8,6 +9,7 @@ import com.annyarusova.subscriptionservice.repository.SubscriptionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 
 @Service
@@ -17,6 +19,7 @@ public class SubscriptionService {
     private final AuthService authService;
     private final UserService userService;
 
+    @Transactional
     public SubscriptionDto subscribe(SubscriptionDto subDto) {
         UserEntity user = authService.getAuthenticatedUser();
         user.setEmail(subDto.getEmail());
@@ -29,6 +32,23 @@ public class SubscriptionService {
         }
 
         return subDto;
+    }
+
+    @Transactional
+    public UnsubscriptionDto unsubscribe(UnsubscriptionDto unsubDto) {
+        UserEntity user = authService.getAuthenticatedUser();
+        if (unsubDto.getTag() == null || unsubDto.getTag().isEmpty()) {
+            subscriptionRepository.unsubscribeAll(user.getLogin());
+            return unsubDto;
+        }
+        unsubDto.setTag(unsubDto.getTag().trim());
+        if (!unsubDto.getTag().matches("[a-zA-Z0-9_-]+")) {
+            throw new IllegalArgumentException("Указан невалидный тег: \"" + unsubDto.getTag() + "\"");
+        }
+        if (subscriptionRepository.unsubscribeByTag(user.getLogin(), unsubDto.getTag()) == 0) {
+            throw new IllegalArgumentException("Вы не подписаны на тег " + unsubDto.getTag());
+        }
+        return unsubDto;
     }
 }
 

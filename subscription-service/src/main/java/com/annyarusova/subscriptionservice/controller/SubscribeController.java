@@ -1,6 +1,7 @@
 package com.annyarusova.subscriptionservice.controller;
 
 import com.annyarusova.subscriptionservice.dto.SubscriptionDto;
+import com.annyarusova.subscriptionservice.dto.UnsubscriptionDto;
 import com.annyarusova.subscriptionservice.service.SubscriptionService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -16,12 +17,16 @@ public class SubscribeController {
     private final SubscriptionService subscriptionService;
 
     @Operation(description = "Подписаться на рассылку")
-    @PostMapping
+    @PutMapping
     public ResponseEntity<SubscriptionDto> subscribe(@RequestBody @Validated SubscriptionDto subscription) {
-        // TODO: по данным авторизации сохранить email в базу с пользователями. В БД с подпиской будут теги, id пользователя и остальное.
         return ResponseEntity.ok(subscriptionService.subscribe(subscription));
     }
 
-    // TODO: unsubscribe
+    @Operation(description = "Отписаться от рассылки")
+    @DeleteMapping
+    public ResponseEntity<UnsubscriptionDto> unsubscribe(@RequestBody UnsubscriptionDto unsubscription) {
+        return ResponseEntity.ok(subscriptionService.unsubscribe(unsubscription));
+    }
+
 }
 

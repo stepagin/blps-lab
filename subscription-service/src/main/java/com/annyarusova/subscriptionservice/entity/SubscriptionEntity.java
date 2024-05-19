@@ -6,10 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "subscription",
-        uniqueConstraints = {
-                @UniqueConstraint(columnNames = {"person", "tag"})
-        })
+@Table(name = "subscription", uniqueConstraints = {@UniqueConstraint(columnNames = {"person", "tag"})})
 @Getter
 @Setter
 @RequiredArgsConstructor
@@ -18,13 +15,10 @@ public class SubscriptionEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
-
     @Column(nullable = false)
     private String tag;
-
     @Column(nullable = false)
     private int interval;
-
     @ManyToOne
     @JoinColumn(name = "person", nullable = false)
     private UserEntity user;
