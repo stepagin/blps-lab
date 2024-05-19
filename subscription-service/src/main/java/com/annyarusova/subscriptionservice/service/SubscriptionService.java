@@ -2,8 +2,11 @@ package com.annyarusova.subscriptionservice.service;
 
 import com.annyarusova.subscriptionservice.dto.SubscriptionDto;
 import com.annyarusova.subscriptionservice.entity.SubscriptionEntity;
+import com.annyarusova.subscriptionservice.entity.UserEntity;
+import com.annyarusova.subscriptionservice.exception.SubscriptionAlreadyExistsException;
 import com.annyarusova.subscriptionservice.repository.SubscriptionRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 
@@ -11,12 +14,20 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class SubscriptionService {
     private final SubscriptionRepository subscriptionRepository;
+    private final AuthService authService;
+    private final UserService userService;
 
-    // TODO настроить JWT авторизацию на этот метод, реализовать получение данных юзера по JWT
     public SubscriptionDto subscribe(SubscriptionDto subDto) {
-        SubscriptionEntity subscription = new SubscriptionEntity(subDto.getEmail(), subDto.getTag(), subDto.getNotifyInterval());
-        // TODO почекать запись в БД, правильно ли зранятся данные
-        subscriptionRepository.save(subscription);
+        UserEntity user = authService.getAuthenticatedUser();
+        user.setEmail(subDto.getEmail());
+        user = userService.saveIfNotExist(user);
+        SubscriptionEntity subscription = new SubscriptionEntity(user, subDto.getTag(), subDto.getInterval());
+        try {
+            subscriptionRepository.save(subscription);
+        } catch (DataIntegrityViolationException e) {
+            throw new SubscriptionAlreadyExistsException("Вы уже подписались на тег " + subDto.getTag());
+        }
+
         return subDto;
     }
 }

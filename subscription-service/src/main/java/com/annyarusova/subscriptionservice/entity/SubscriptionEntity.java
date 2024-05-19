@@ -5,11 +5,11 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
-import java.time.Period;
-
 @Entity
-@Table(name = "subscription")
+@Table(name = "subscription",
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = {"person", "tag"})
+        })
 @Getter
 @Setter
 @RequiredArgsConstructor
@@ -20,20 +20,18 @@ public class SubscriptionEntity {
     private Long id;
 
     @Column(nullable = false)
-    private String email;
-
-    @Column(nullable = false)
     private String tag;
 
-    @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE", nullable = false)
-    private Period notifyInterval;
+    @Column(nullable = false)
+    private int interval;
 
-    @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE", nullable = false)
-    private LocalDateTime lastNotify = LocalDateTime.now();
+    @ManyToOne
+    @JoinColumn(name = "person", nullable = false)
+    private UserEntity user;
 
-    public SubscriptionEntity(String email, String tag, int notifyInterval) {
-        this.email = email;
+    public SubscriptionEntity(UserEntity user, String tag, int interval) {
+        this.user = user;
         this.tag = tag;
-        this.notifyInterval = Period.ofDays(notifyInterval);
+        this.interval = interval;
     }
 }

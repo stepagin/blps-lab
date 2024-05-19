@@ -8,6 +8,8 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name = "person")
 @Getter
@@ -21,7 +23,10 @@ public class UserEntity {
     private String password;
     @Column(nullable = false)
     private String nickname;
+    @Column(unique = true)
     private String email;
+    @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE", nullable = false)
+    private LocalDateTime lastNotify = LocalDateTime.now();
 
     public UserEntity(String login, String password, String nickname) {
         this.login = login;
