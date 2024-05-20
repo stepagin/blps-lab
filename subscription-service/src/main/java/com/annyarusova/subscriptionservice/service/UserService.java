@@ -32,4 +32,9 @@ public class UserService {
         }
         return save(user);
     }
+
+    @Transactional
+    public void updateLastNotification(String login) {
+        userRepository.updateLastNotify(login);
+    }
 }

@@ -5,11 +5,14 @@ import com.annyarusova.subscriptionservice.dto.UnsubscriptionDto;
 import com.annyarusova.subscriptionservice.entity.SubscriptionEntity;
 import com.annyarusova.subscriptionservice.entity.UserEntity;
 import com.annyarusova.subscriptionservice.exception.SubscriptionAlreadyExistsException;
+import com.annyarusova.subscriptionservice.repository.NotificationInterfaceDto;
 import com.annyarusova.subscriptionservice.repository.SubscriptionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 
 @Service
@@ -49,6 +52,10 @@ public class SubscriptionService {
             throw new IllegalArgumentException("Вы не подписаны на тег " + unsubDto.getTag());
         }
         return unsubDto;
+    }
+
+    public List<NotificationInterfaceDto> getReadyNotifications() {
+        return subscriptionRepository.findNotifications();
     }
 }
 

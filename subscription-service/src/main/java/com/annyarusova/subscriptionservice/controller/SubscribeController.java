@@ -2,6 +2,7 @@ package com.annyarusova.subscriptionservice.controller;
 
 import com.annyarusova.subscriptionservice.dto.SubscriptionDto;
 import com.annyarusova.subscriptionservice.dto.UnsubscriptionDto;
+import com.annyarusova.subscriptionservice.service.NotificationService;
 import com.annyarusova.subscriptionservice.service.SubscriptionService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -10,11 +11,12 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("${api.endpoints.base-url}/subscription")
+@RequestMapping("${api.endpoints.api-version}/subscription")
 @CrossOrigin
 @RequiredArgsConstructor
 public class SubscribeController {
     private final SubscriptionService subscriptionService;
+    private final NotificationService notificationService;
 
     @Operation(description = "Подписаться на рассылку")
     @PutMapping
@@ -28,5 +30,11 @@ public class SubscribeController {
         return ResponseEntity.ok(subscriptionService.unsubscribe(unsubscription));
     }
 
+    @Operation(description = "Запустить рассылку дайджестов вручную")
+    @GetMapping
+    public ResponseEntity<String> sendNotifications() {
+        notificationService.sendNotifications();
+        return ResponseEntity.ok("Рассылка успешно проведена.");
+    }
 }
 

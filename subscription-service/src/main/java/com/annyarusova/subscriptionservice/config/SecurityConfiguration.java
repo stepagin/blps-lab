@@ -27,7 +27,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfiguration {
     private final JwtFilter jwtFilter;
     private final UserDetailService userDetailService;
-    @Value(value = "${api.endpoints.base-url}")
+    @Value(value = "${api.endpoints.api-version}")
     private String baseUrl;
 
     @Bean
@@ -49,10 +49,7 @@ public class SecurityConfiguration {
                 .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))
 
                 .authorizeHttpRequests(registry -> {
-//                    registry.requestMatchers(baseUrl + "/api-docs").permitAll();
-//                    registry.requestMatchers(baseUrl + "/auth/register").permitAll();
-//                    registry.requestMatchers(baseUrl + "/auth/login").permitAll();
-//                    registry.requestMatchers(baseUrl + "/auth/token").permitAll();
+                    registry.requestMatchers(baseUrl + "/api-docs").permitAll();
                     registry.anyRequest().authenticated();
                 })
                 .addFilterAfter(jwtFilter, UsernamePasswordAuthenticationFilter.class)
