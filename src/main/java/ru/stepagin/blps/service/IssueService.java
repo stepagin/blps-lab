@@ -32,8 +32,10 @@ public class IssueService {
     @Transactional
     public IssueDto createIssue(CreateIssueDto issue, UserEntity user) {
         final IssueEntity issueEntity = issueRepository.save(new IssueEntity(issue.getTitle(), issue.getDescription(), user));
-        for (String tagName : issue.getTags()) {
-            tagName = tagName.trim().toLowerCase();
+
+        for (String tagName : issue.getTags().stream()
+                .map(String::toLowerCase)
+                .map(String::trim).toList()) {
             TagEntity tagEntity = tagRepository.findTagByName(tagName);
             if (tagEntity == null) {
                 if (!tagName.matches("[a-zA-Z0-9_-]+")) {
