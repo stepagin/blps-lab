@@ -25,7 +25,6 @@ public class NotificationService {
     private String from;
 
     public void sendNotifications() {
-        // TODO настроить нотификацию каждые 3-5 минут в QUARTZ, чтобы можно было проверить на паре
         List<NotificationInterfaceDto> notificationList = subscriptionService.getReadyNotifications();
         for (NotificationInterfaceDto notification : notificationList) {
             sendEmail(notification.getEmail(),
