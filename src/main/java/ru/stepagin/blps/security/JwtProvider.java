@@ -34,7 +34,7 @@ public class JwtProvider {
 
     public String generateAccessToken(@NonNull UserEntity user) {
         final LocalDateTime now = LocalDateTime.now();
-        final Instant accessExpirationInstant = now.plusMinutes(15).atZone(ZoneId.systemDefault()).toInstant();
+        final Instant accessExpirationInstant = now.plusMinutes(60).atZone(ZoneId.systemDefault()).toInstant();
         final Date accessExpiration = Date.from(accessExpirationInstant);
         return Jwts.builder()
                 .setSubject(user.getLogin())
@@ -72,15 +72,15 @@ public class JwtProvider {
                     .parseClaimsJws(token);
             return true;
         } catch (ExpiredJwtException expEx) {
-            log.error("Token expired", expEx);
+            log.error("Token expired {}", expEx.getMessage());
         } catch (UnsupportedJwtException unsEx) {
-            log.error("Unsupported jwt", unsEx);
+            log.error("Unsupported jwt {}", unsEx.getMessage());
         } catch (MalformedJwtException mjEx) {
-            log.error("Malformed jwt", mjEx);
+            log.error("Malformed jwt {}", mjEx.getMessage());
         } catch (SignatureException sEx) {
-            log.error("Invalid signature", sEx);
+            log.error("Invalid signature {}", sEx.getMessage());
         } catch (Exception e) {
-            log.error("invalid token", e);
+            log.error("invalid token {}", e.getMessage());
         }
         return false;
     }
