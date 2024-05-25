@@ -42,7 +42,7 @@ public interface SubscriptionRepository extends JpaRepository<SubscriptionEntity
                   join subscription.issue as i on i.id = iet.issue_entity_id\s
                   join subscription.person as p on p.login = s.person\s
                 where\s
-                  p.last_notify + (INTERVAL '1' MINUTE * s.interval) < i.creation_date
+                  p.last_notify + (INTERVAL '1' SECOND * s.interval) < i.creation_date
               ) as r1\s
             group by\s
               r1.person,\s

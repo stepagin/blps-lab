@@ -1,6 +1,7 @@
 package com.annyarusova.subscriptionservice.exception;
 
 import io.swagger.v3.oas.annotations.Hidden;
+import jakarta.security.auth.message.AuthException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -26,6 +27,14 @@ public class ExceptionHandlerService {
         ExceptionResponse exceptionResponse = ExceptionResponse.forbidden(e.getMessage());
         log.error("[{}] AccessDeniedException: {}", exceptionResponse.getId(), e.getMessage());
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(exceptionResponse);
+    }
+
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler(AuthException.class)
+    public ResponseEntity<ExceptionResponse> handleException(final AuthException e) {
+        ExceptionResponse exceptionResponse = ExceptionResponse.forbidden(e.getMessage());
+        log.error("[{}] AuthException: {}", exceptionResponse.getId(), e.getMessage());
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(exceptionResponse);
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -86,5 +95,4 @@ public class ExceptionHandlerService {
         log.error("Common Exception ({}): {}", e.getClass(), e.getMessage());
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(exceptionResponse);
     }
-
 }

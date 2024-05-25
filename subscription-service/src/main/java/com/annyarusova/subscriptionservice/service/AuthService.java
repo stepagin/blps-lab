@@ -18,8 +18,7 @@ public class AuthService {
         return (JwtAuthentication) SecurityContextHolder.getContext().getAuthentication();
     }
 
-    @SneakyThrows
-    public UserEntity getAuthenticatedUser() {
+    public UserEntity getAuthenticatedUser() throws AuthException {
         return userService.getByLogin(getAuthInfo().getLogin()).orElseThrow(() -> new AuthException("Пользователь не выполнил вход"));
     }
 }

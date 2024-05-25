@@ -7,6 +7,7 @@ import com.annyarusova.subscriptionservice.entity.UserEntity;
 import com.annyarusova.subscriptionservice.exception.SubscriptionAlreadyExistsException;
 import com.annyarusova.subscriptionservice.repository.NotificationInterfaceDto;
 import com.annyarusova.subscriptionservice.repository.SubscriptionRepository;
+import jakarta.security.auth.message.AuthException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
@@ -23,7 +24,7 @@ public class SubscriptionService {
     private final UserService userService;
 
     @Transactional
-    public SubscriptionDto subscribe(SubscriptionDto subDto) {
+    public SubscriptionDto subscribe(SubscriptionDto subDto) throws AuthException {
         UserEntity user = authService.getAuthenticatedUser();
         user.setEmail(subDto.getEmail());
         user = userService.saveIfNotExist(user);
@@ -38,7 +39,7 @@ public class SubscriptionService {
     }
 
     @Transactional
-    public UnsubscriptionDto unsubscribe(UnsubscriptionDto unsubDto) {
+    public UnsubscriptionDto unsubscribe(UnsubscriptionDto unsubDto) throws AuthException {
         UserEntity user = authService.getAuthenticatedUser();
         if (unsubDto.getTag() == null || unsubDto.getTag().isEmpty()) {
             subscriptionRepository.unsubscribeAll(user.getLogin());

@@ -6,6 +6,7 @@ import com.annyarusova.subscriptionservice.service.NotificationService;
 import com.annyarusova.subscriptionservice.service.SubscriptionService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -20,12 +21,14 @@ public class SubscribeController {
 
     @Operation(description = "Подписаться на рассылку")
     @PutMapping
+    @SneakyThrows
     public ResponseEntity<SubscriptionDto> subscribe(@RequestBody @Validated SubscriptionDto subscription) {
         return ResponseEntity.ok(subscriptionService.subscribe(subscription));
     }
 
     @Operation(description = "Отписаться от рассылки")
     @DeleteMapping
+    @SneakyThrows
     public ResponseEntity<UnsubscriptionDto> unsubscribe(@RequestBody UnsubscriptionDto unsubscription) {
         return ResponseEntity.ok(subscriptionService.unsubscribe(unsubscription));
     }
