@@ -5,13 +5,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import ru.stepagin.blps.dto.IssueDto;
-import ru.stepagin.blps.entity.UserEntity;
 
 @Service
 @RequiredArgsConstructor
 public class KafkaProducerService {
     private final KafkaTemplate<Long, IssueDto> issueKafkaTemplate;
-    private final KafkaTemplate<String, UserEntity> userKafkaTemplate;
+    private final KafkaTemplate<String, String> userKafkaTemplate;
     @Value(value = "${app.kafka.topic-names.issue}")
     private String issueTopicName;
     @Value(value = "${app.kafka.topic-names.user}")
@@ -22,8 +21,8 @@ public class KafkaProducerService {
         issueKafkaTemplate.flush();
     }
 
-    public void sendUser(String login, UserEntity user) {
-        userKafkaTemplate.send(userTopicName, login, user);
+    public void sendUserEmail(String login, String userEmail) {
+        userKafkaTemplate.send(userTopicName, login, userEmail);
         userKafkaTemplate.flush();
     }
 }

@@ -32,13 +32,12 @@ public class IssueEntity {
     @Column(nullable = false, updatable = false, columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
     private LocalDateTime date = LocalDateTime.now();
 
-    @ManyToOne
-    @JoinColumn(name = "author_id", nullable = false, updatable = false)
-    private UserEntity author;
+    @Column(name = "author_email", nullable = false, updatable = false)
+    private String authorLogin;
 
-    public IssueEntity(String title, String description, UserEntity author) {
+    public IssueEntity(String title, String description, String authorLogin) {
         this.title = title;
         this.description = description;
-        this.author = author;
+        this.authorLogin = authorLogin;
     }
 }

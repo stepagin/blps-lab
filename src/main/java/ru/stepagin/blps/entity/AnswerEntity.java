@@ -22,9 +22,8 @@ public class AnswerEntity {
     @Column(name = "id")
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "author_id", nullable = false)
-    private UserEntity author;
+    @Column(name = "author_login", nullable = false)
+    private String authorLogin;
 
     @ManyToOne
     @JoinColumn(name = "issue_id", nullable = false)
@@ -37,9 +36,9 @@ public class AnswerEntity {
     @Column(name = "date", nullable = false, updatable = false, columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
     private LocalDateTime date = LocalDateTime.now();
 
-    public AnswerEntity(String text, UserEntity author, IssueEntity issue) {
+    public AnswerEntity(String text, String author, IssueEntity issue) {
         this.text = text;
-        this.author = author;
+        this.authorLogin = author;
         this.issue = issue;
     }
 }

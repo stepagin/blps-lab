@@ -8,7 +8,6 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Repository;
 import ru.stepagin.blps.entity.IssueEntity;
-import ru.stepagin.blps.entity.UserEntity;
 
 import java.util.List;
 

@@ -8,7 +8,6 @@ import ru.stepagin.blps.dto.IssueDto;
 import ru.stepagin.blps.entity.IssueEntity;
 import ru.stepagin.blps.entity.IssueTagEntity;
 import ru.stepagin.blps.entity.TagEntity;
-import ru.stepagin.blps.entity.UserEntity;
 import ru.stepagin.blps.exception.IssueNotFoundException;
 import ru.stepagin.blps.mapper.IssueMapper;
 import ru.stepagin.blps.repository.AnswerRepository;
@@ -30,8 +29,8 @@ public class IssueService {
     private final KafkaProducerService kafkaProducerService;
 
     @Transactional
-    public IssueDto createIssue(CreateIssueDto issue, UserEntity user) {
-        final IssueEntity issueEntity = issueRepository.save(new IssueEntity(issue.getTitle(), issue.getDescription(), user));
+    public IssueDto createIssue(CreateIssueDto issue, String authorLogin) {
+        final IssueEntity issueEntity = issueRepository.save(new IssueEntity(issue.getTitle(), issue.getDescription(), authorLogin));
 
         for (String tagName : issue.getTags().stream()
                 .map(String::toLowerCase)
@@ -74,10 +73,6 @@ public class IssueService {
     protected IssueEntity getIssueEntityById(Long issueId) {
         return issueRepository.findById(issueId)
                 .orElseThrow(() -> new IssueNotFoundException("Issue not found: " + issueId));
-    }
-
-    public boolean isIssueOwner(Long issueId, UserEntity user) {
-        return issueRepository.existsByIdAndAuthor(issueId, user);
     }
 
     public boolean existsById(Long issueId) {

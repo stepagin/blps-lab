@@ -8,7 +8,6 @@ import ru.stepagin.blps.dto.CreateAnswerDto;
 import ru.stepagin.blps.dto.IssueDto;
 import ru.stepagin.blps.entity.AnswerEntity;
 import ru.stepagin.blps.entity.IssueEntity;
-import ru.stepagin.blps.entity.UserEntity;
 import ru.stepagin.blps.exception.InvalidIdSuppliedException;
 import ru.stepagin.blps.mapper.AnswerMapper;
 import ru.stepagin.blps.mapper.IssueMapper;
@@ -33,7 +32,7 @@ public class AnswerService {
         return AnswerMapper.toDto(answerRepository.findByIssueId(issueId));
     }
 
-    public IssueDto createAnswer(CreateAnswerDto answer, Long issueId, UserEntity author) {
+    public IssueDto createAnswer(CreateAnswerDto answer, Long issueId, String author) {
         IssueEntity issue = issueService.getIssueEntityById(issueId);
         AnswerEntity answerEntity = new AnswerEntity(answer.getText(), author, issue);
         return IssueMapper.toDto(issue, List.of(answerRepository.save(answerEntity)), issueService.getTagsByIssueId(issueId));
@@ -49,8 +48,8 @@ public class AnswerService {
         answerRepository.deleteById(answerId);
     }
 
-    public boolean isAnswerOwner(Long answerId, UserEntity user) {
-        return answerRepository.existsByIdAndAuthor(answerId, user);
+    public boolean isAnswerOwner(Long answerId, String authorEmail) {
+        return answerRepository.existsByIdAndAuthor(answerId, authorEmail);
     }
 }
 

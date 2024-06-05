@@ -11,7 +11,6 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
 import org.springframework.kafka.support.serializer.JsonSerializer;
 import ru.stepagin.blps.dto.IssueDto;
-import ru.stepagin.blps.entity.UserEntity;
 
 import java.util.HashMap;
 import java.util.Map;
