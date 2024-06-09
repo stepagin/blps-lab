@@ -15,7 +15,7 @@ public class IssueDto {
     private final String title;
     private final String description;
     private LocalDateTime date = LocalDateTime.now();
-    private PersonDto author;
+    private String author;
     private List<AnswerDto> answers;
     private List<String> tags;
 }

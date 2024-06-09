@@ -11,7 +11,7 @@ public abstract class AnswerMapper {
         AnswerDto answerDto = new AnswerDto();
         answerDto.setId(answerEntity.getId());
         answerDto.setText(answerEntity.getText());
-        answerDto.setAuthor(answerEntity.getAuthor().getNickname());
+        answerDto.setAuthor(answerEntity.getAuthorLogin());
         answerDto.setCreatedAt(answerEntity.getDate());
         return answerDto;
     }

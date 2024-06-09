@@ -13,8 +13,6 @@ import java.util.List;
 
 @Repository
 public interface IssueRepository extends JpaRepository<IssueEntity, Long> {
-    @Query("select (count(i) > 0) from IssueEntity i where i.id = :id and i.author = :author")
-    boolean existsByIdAndAuthor(@Param("id") @NonNull Long id, @Param("author") @NonNull UserEntity author);
 
     @Query("select i as issue, " +
             "(select array_agg (t.tag.name) within group (order by t.tag.name) from IssueTagEntity t where t.issue.id = i.id) as tags " +

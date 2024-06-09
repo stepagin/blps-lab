@@ -32,7 +32,7 @@ public class IssueEntity {
     @Column(nullable = false, updatable = false, columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
     private LocalDateTime date = LocalDateTime.now();
 
-    @Column(name = "author_email", nullable = false, updatable = false)
+    @Column(name = "author_login", nullable = false)
     private String authorLogin;
 
     public IssueEntity(String title, String description, String authorLogin) {

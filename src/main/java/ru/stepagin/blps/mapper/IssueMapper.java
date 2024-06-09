@@ -14,7 +14,7 @@ public abstract class IssueMapper {
         IssueDto issueDto = new IssueDto(issueEntity.getTitle(), issueEntity.getDescription());
         issueDto.setId(issueEntity.getId());
         issueDto.setDate(issueEntity.getDate());
-        issueDto.setAuthor(PersonMapper.toDto(issueEntity.getAuthor()));
+        issueDto.setAuthor(issueEntity.getAuthorLogin());
         issueDto.setAnswers(null);
         return issueDto;
     }

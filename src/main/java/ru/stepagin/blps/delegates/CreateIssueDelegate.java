@@ -22,8 +22,13 @@ public class CreateIssueDelegate implements JavaDelegate {
             throw new BpmnError("Not a regular group");
         }
 
-        String user = (String) delegateExecution.getVariable("user");
-        CreateIssueDto issue = (CreateIssueDto) delegateExecution.getVariable("issue");
+        String title = (String) delegateExecution.getVariable("title");
+        String description = (String) delegateExecution.getVariable("description");
+        String user = delegateExecution.getProcessEngineServices().getIdentityService().getCurrentAuthentication().getUserId();
+
+        CreateIssueDto issue = new CreateIssueDto();
+        issue.setTitle(title);
+        issue.setDescription(description);
         IssueDto issueDto = issueService.createIssue(issue, user);
         delegateExecution.setVariable("issueDto", issueDto);
     }

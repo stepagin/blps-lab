@@ -1,0 +1,33 @@
+{
+  "components": [
+    {
+      "label": "Id вопроса",
+      "type": "number",
+      "layout": {
+        "row": "Row_056df1a",
+        "columns": null
+      },
+      "id": "Field_11qhvk6",
+      "key": "issue_id"
+    },
+    {
+      "action": "submit",
+      "label": "Submit",
+      "type": "button",
+      "layout": {
+        "row": "Row_150kfb2",
+        "columns": null
+      },
+      "id": "Field_15xkqoh"
+    }
+  ],
+  "type": "default",
+  "id": "input_issue_id_form",
+  "exporter": {
+    "name": "Camunda Modeler",
+    "version": "5.12.0"
+  },
+  "executionPlatform": "Camunda Platform",
+  "executionPlatformVersion": "7.19.0",
+  "schemaVersion": 9
+}

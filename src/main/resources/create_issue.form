@@ -1,0 +1,50 @@
+{
+  "components": [
+    {
+      "text": "# Cоздание вопроса",
+      "label": "Text view",
+      "type": "text",
+      "layout": {
+        "row": "Row_02rybi5",
+        "columns": null
+      },
+      "id": "Field_0898msh"
+    },
+    {
+      "label": "Название",
+      "type": "textfield",
+      "layout": {
+        "row": "Row_14277zx",
+        "columns": null
+      },
+      "id": "Field_07xos7b",
+      "key": "title",
+      "validate": {
+        "minLength": 1,
+        "maxLength": 255
+      }
+    },
+    {
+      "label": "Описание",
+      "type": "textfield",
+      "layout": {
+        "row": "Row_1x69ruh",
+        "columns": null
+      },
+      "id": "Field_0543qzp",
+      "key": "description",
+      "validate": {
+        "maxLength": 8000
+      }
+    }
+  ],
+  "type": "default",
+  "id": "create_issue_form",
+  "exporter": {
+    "name": "Camunda Modeler",
+    "version": "5.12.0"
+  },
+  "executionPlatform": "Camunda Platform",
+  "executionPlatformVersion": "7.19.0",
+  "schemaVersion": 9
+}

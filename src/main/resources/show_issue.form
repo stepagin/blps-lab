@@ -1,0 +1,44 @@
+{
+  "components": [
+    {
+      "text": "Id is {{article.id}}",
+      "label": "Text view",
+      "type": "text",
+      "layout": {
+        "row": "Row_0ddsdtl",
+        "columns": null
+      },
+      "id": "Field_1gipa8s"
+    },
+    {
+      "text": "Name is {{article.name}}",
+      "label": "Text view",
+      "type": "text",
+      "layout": {
+        "row": "Row_0we8iet",
+        "columns": null
+      },
+      "id": "Field_13z7tjp",
+      "properties": {}
+    },
+    {
+      "text": "Body:\n{{article.body}}",
+      "label": "Text view",
+      "type": "text",
+      "layout": {
+        "row": "Row_0ql8eog",
+        "columns": null
+      },
+      "id": "Field_169da7i"
+    }
+  ],
+  "type": "default",
+  "id": "show_issue_form",
+  "exporter": {
+    "name": "Camunda Modeler",
+    "version": "5.12.0"
+  },
+  "executionPlatform": "Camunda Platform",
+  "executionPlatformVersion": "7.19.0",
+  "schemaVersion": 9
+}

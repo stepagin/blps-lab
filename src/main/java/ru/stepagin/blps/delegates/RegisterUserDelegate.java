@@ -20,6 +20,7 @@ public class RegisterUserDelegate implements JavaDelegate {
         User user = delegateExecution.getProcessEngineServices().getIdentityService().newUser(login);
         user.setFirstName(name);
         user.setPassword(password);
+        user.setEmail(login);
         delegateExecution.getProcessEngineServices().getIdentityService().saveUser(user);
     }
 }

@@ -20,7 +20,7 @@ public class DeleteIssueByIdDelegate implements JavaDelegate {
             throw new BpmnError("Not a regular group");
         }
 
-        long id = (long) delegateExecution.getVariable("id");
+        long id = (long) delegateExecution.getVariable("issue_id");
         issueService.deleteIssueById(id);
     }
 }
