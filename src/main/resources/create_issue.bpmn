@@ -21,7 +21,7 @@
       <bpmn:incoming>Flow_0qc8uao</bpmn:incoming>
       <bpmn:outgoing>Flow_0mjmzxi</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:serviceTask id="create_issue" name="Создание вопроса" camunda:delegateExpression="${сreateIssueDelegate}">
+    <bpmn:serviceTask id="create_issue" name="Создание вопроса" camunda:delegateExpression="${createIssueDelegate}">
       <bpmn:incoming>Flow_0mjmzxi</bpmn:incoming>
       <bpmn:outgoing>Flow_0fv8tbw</bpmn:outgoing>
     </bpmn:serviceTask>
