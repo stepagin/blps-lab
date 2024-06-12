@@ -73,6 +73,10 @@ public class IssueService {
                 .orElseThrow(() -> new IssueNotFoundException("Issue not found: " + issueId));
     }
 
+    public boolean isIssueOwner(Long issueId, String user) {
+        return issueRepository.existsByIdAndAuthor(issueId, user);
+    }
+
     public boolean existsById(Long issueId) {
         return issueRepository.existsById(issueId);
     }

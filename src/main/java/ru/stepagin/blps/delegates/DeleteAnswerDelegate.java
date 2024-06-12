@@ -17,13 +17,14 @@ public class DeleteAnswerDelegate implements JavaDelegate {
 
     @Override
     public void execute(DelegateExecution delegateExecution) throws Exception {
-        if (!delegateExecution.getProcessEngineServices().getIdentityService().getCurrentAuthentication().getGroupIds().contains("regular")) {
-            throw new BpmnError("Not a regular group");
+        long issueId = Long.parseLong(String.valueOf(delegateExecution.getVariable("issue_id")));
+        long answerId = Long.parseLong(String.valueOf(delegateExecution.getVariable("answer_id")));
+        String user = delegateExecution.getProcessEngineServices().getIdentityService().getCurrentAuthentication().getUserId();
+        if (!delegateExecution.getProcessEngineServices().getIdentityService().getCurrentAuthentication().getGroupIds().contains("moderator")
+                && !answerService.isAnswerOwner(answerId, user)
+        ) {
+            throw new BpmnError("Not a moderator group or owner");
         }
-
-        long issueId = (long) delegateExecution.getVariable("issue_id");
-        long answerId = (long) delegateExecution.getVariable("answer_id");
-
         answerService.deleteAnswer(issueId, answerId);
     }
 }

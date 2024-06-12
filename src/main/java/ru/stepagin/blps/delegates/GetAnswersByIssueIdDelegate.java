@@ -18,8 +18,11 @@ public class GetAnswersByIssueIdDelegate implements JavaDelegate {
 
     @Override
     public void execute(DelegateExecution delegateExecution) {
-        long issueId = (long) delegateExecution.getVariable("issue_id");
+        long issueId = Long.parseLong(String.valueOf(delegateExecution.getVariable("issue_id")));
         List<AnswerDto> answers = answerService.getAnswersByIssueId(issueId);
-        delegateExecution.setVariable("answers", answers);
+        var answer = answers.get(0);
+        delegateExecution.setVariable("answer", answer);
+        delegateExecution.setVariable("author", answer.getAuthor());
+        delegateExecution.setVariable("text", answer.getText());
     }
 }

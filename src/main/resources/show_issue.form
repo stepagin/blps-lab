@@ -1,7 +1,7 @@
 {
   "components": [
     {
-      "text": "Id is {{article.id}}",
+      "text": "Id: {{issue.id}}",
       "label": "Text view",
       "type": "text",
       "layout": {
@@ -11,7 +11,7 @@
       "id": "Field_1gipa8s"
     },
     {
-      "text": "Name is {{article.name}}",
+      "text": "Title: {{issue.title}}",
       "label": "Text view",
       "type": "text",
       "layout": {
@@ -22,7 +22,7 @@
       "properties": {}
     },
     {
-      "text": "Body:\n{{article.body}}",
+      "text": "Description:\n{{issue.description}}",
       "label": "Text view",
       "type": "text",
       "layout": {
@@ -30,15 +30,35 @@
         "columns": null
       },
       "id": "Field_169da7i"
+    },
+    {
+      "text": "Author:\n{{issue.author}}",
+      "label": "Text view",
+      "type": "text",
+      "layout": {
+        "row": "Row_155vgrs",
+        "columns": null
+      },
+      "id": "Field_1hz3n3o"
+    },
+    {
+      "text": "Answers:\n{{issue.answers}}",
+      "label": "Text view",
+      "type": "text",
+      "layout": {
+        "row": "Row_1f19hnq",
+        "columns": null
+      },
+      "id": "Field_07fxqn8"
     }
   ],
   "type": "default",
   "id": "show_issue_form",
   "exporter": {
     "name": "Camunda Modeler",
-    "version": "5.12.0"
+    "version": "5.23.0"
   },
   "executionPlatform": "Camunda Platform",
   "executionPlatformVersion": "7.19.0",
-  "schemaVersion": 9
+  "schemaVersion": 16
 }

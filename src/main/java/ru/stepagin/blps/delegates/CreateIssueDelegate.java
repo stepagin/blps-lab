@@ -18,10 +18,6 @@ public class CreateIssueDelegate implements JavaDelegate {
 
     @Override
     public void execute(DelegateExecution delegateExecution) throws Exception {
-        if (!delegateExecution.getProcessEngineServices().getIdentityService().getCurrentAuthentication().getGroupIds().contains("regular")) {
-            throw new BpmnError("Not a regular group");
-        }
-
         String title = (String) delegateExecution.getVariable("title");
         String description = (String) delegateExecution.getVariable("description");
         String user = delegateExecution.getProcessEngineServices().getIdentityService().getCurrentAuthentication().getUserId();
@@ -29,7 +25,6 @@ public class CreateIssueDelegate implements JavaDelegate {
         CreateIssueDto issue = new CreateIssueDto();
         issue.setTitle(title);
         issue.setDescription(description);
-        IssueDto issueDto = issueService.createIssue(issue, user);
-        delegateExecution.setVariable("issueDto", issueDto);
+        issueService.createIssue(issue, user);
     }
 }

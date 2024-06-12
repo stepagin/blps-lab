@@ -26,5 +26,8 @@ public interface IssueRepository extends JpaRepository<IssueEntity, Long> {
             "group by i.id")
     List<IssueWithTagsInterface> findByTitle(@Param("title") @NonNull String title, Pageable pageable);
 
+
+    @Query("select (count(i) > 0) from IssueEntity i where i.id = :id and i.authorLogin = :author")
+    boolean existsByIdAndAuthor(@Param("id") @NonNull Long id, @Param("author") @NonNull String author);
 }
 

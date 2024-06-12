@@ -1,40 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_1ht57qe" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.23.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.19.0">
   <bpmn:collaboration id="Collaboration_11kwgck">
-    <bpmn:participant id="Participant_0grqo" name="Создание вопроса" processRef="Process_0gsha" />
+    <bpmn:participant id="Participant_0grqop4" name="Создание ответа" processRef="Process_0gshae0" />
   </bpmn:collaboration>
-  <bpmn:process id="Process_0gsha" name="Create issue process" isExecutable="true">
+  <bpmn:process id="Process_0gshae0" name="Create answer process" isExecutable="true">
     <bpmn:laneSet id="LaneSet_0ysytzs">
       <bpmn:lane id="Lane_1ilpcbf" name="Server">
-        <bpmn:flowNodeRef>create_issue</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>create_answer</bpmn:flowNodeRef>
       </bpmn:lane>
       <bpmn:lane id="Lane_0pv0m6r" name="Client">
         <bpmn:flowNodeRef>StartEvent_1</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>input_issue_preview</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>input_answer_preview</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>Event_1inux0c</bpmn:flowNodeRef>
       </bpmn:lane>
     </bpmn:laneSet>
     <bpmn:startEvent id="StartEvent_1">
       <bpmn:outgoing>Flow_0qc8uao</bpmn:outgoing>
     </bpmn:startEvent>
-    <bpmn:userTask id="input_issue_preview" name="Ввод формы вопроса" camunda:formRef="create_issue_form" camunda:formRefBinding="latest">
+    <bpmn:userTask id="input_answer_preview" name="Ввод формы ответа" camunda:formRef="create_answer_form" camunda:formRefBinding="latest">
       <bpmn:incoming>Flow_0qc8uao</bpmn:incoming>
       <bpmn:outgoing>Flow_0mjmzxi</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:serviceTask id="create_issue" name="Создание вопроса" camunda:delegateExpression="${createIssueDelegate}">
+    <bpmn:serviceTask id="create_answer" name="Создание ответа" camunda:delegateExpression="${createAnswerDelegate}">
       <bpmn:incoming>Flow_0mjmzxi</bpmn:incoming>
       <bpmn:outgoing>Flow_0fv8tbw</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:endEvent id="Event_1inux0c">
       <bpmn:incoming>Flow_0fv8tbw</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:sequenceFlow id="Flow_0qc8uao" sourceRef="StartEvent_1" targetRef="input_issue_preview" />
-    <bpmn:sequenceFlow id="Flow_0mjmzxi" sourceRef="input_issue_preview" targetRef="create_issue" />
-    <bpmn:sequenceFlow id="Flow_0fv8tbw" sourceRef="create_issue" targetRef="Event_1inux0c" />
+    <bpmn:sequenceFlow id="Flow_0qc8uao" sourceRef="StartEvent_1" targetRef="input_answer_preview" />
+    <bpmn:sequenceFlow id="Flow_0mjmzxi" sourceRef="input_answer_preview" targetRef="create_answer" />
+    <bpmn:sequenceFlow id="Flow_0fv8tbw" sourceRef="create_answer" targetRef="Event_1inux0c" />
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_11kwgck">
-      <bpmndi:BPMNShape id="Participant_0grqop4_di" bpmnElement="Participant_0grqo" isHorizontal="true">
+      <bpmndi:BPMNShape id="Participant_0grqop4_di" bpmnElement="Participant_0grqop4" isHorizontal="true">
         <dc:Bounds x="160" y="80" width="689" height="370" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
@@ -49,11 +49,11 @@
       <bpmndi:BPMNShape id="BPMNShape_1t5rhuv" bpmnElement="StartEvent_1">
         <dc:Bounds x="210" y="100" width="36" height="36" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1ptsjt2_di" bpmnElement="input_issue_preview">
+      <bpmndi:BPMNShape id="Activity_1ptsjt2_di" bpmnElement="input_answer_preview">
         <dc:Bounds x="281" y="121" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0h3hf2h_di" bpmnElement="create_issue">
+      <bpmndi:BPMNShape id="Activity_0h3hf2h_di" bpmnElement="create_answer">
         <dc:Bounds x="381" y="351" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>

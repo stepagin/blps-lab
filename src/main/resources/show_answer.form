@@ -1,0 +1,44 @@
+{
+  "components": [
+    {
+      "text": "Id: {{answer.id}}",
+      "label": "Text view",
+      "type": "text",
+      "layout": {
+        "row": "Row_0ddsdtl",
+        "columns": null
+      },
+      "id": "Field_1gipa8s"
+    },
+    {
+      "text": "Author:{{answer.author}}",
+      "label": "Text view",
+      "type": "text",
+      "layout": {
+        "row": "Row_16xgfsn",
+        "columns": null
+      },
+      "id": "Field_1hz3n3o"
+    },
+    {
+      "text": "Text: {{answer.text}}",
+      "label": "Text view",
+      "type": "text",
+      "layout": {
+        "row": "Row_16xgfsn",
+        "columns": null
+      },
+      "id": "Field_13z7tjp",
+      "properties": {}
+    }
+  ],
+  "type": "default",
+  "id": "show_answer_form",
+  "exporter": {
+    "name": "Camunda Modeler",
+    "version": "5.23.0"
+  },
+  "executionPlatform": "Camunda Platform",
+  "executionPlatformVersion": "7.19.0",
+  "schemaVersion": 16
+}

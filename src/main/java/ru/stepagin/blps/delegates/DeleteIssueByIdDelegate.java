@@ -16,11 +16,14 @@ public class DeleteIssueByIdDelegate implements JavaDelegate {
 
     @Override
     public void execute(DelegateExecution delegateExecution) throws Exception {
-        if (!delegateExecution.getProcessEngineServices().getIdentityService().getCurrentAuthentication().getGroupIds().contains("regular")) {
-            throw new BpmnError("Not a regular group");
+        long id = Long.parseLong(String.valueOf(delegateExecution.getVariable("issue_id")));
+        String user = delegateExecution.getProcessEngineServices().getIdentityService().getCurrentAuthentication().getUserId();
+        if (!delegateExecution.getProcessEngineServices().getIdentityService().getCurrentAuthentication().getGroupIds().contains("moderator")
+                && !issueService.isIssueOwner(id, user)
+        ) {
+            throw new BpmnError("Not a moderator group or owner");
         }
 
-        long id = (long) delegateExecution.getVariable("issue_id");
         issueService.deleteIssueById(id);
     }
 }

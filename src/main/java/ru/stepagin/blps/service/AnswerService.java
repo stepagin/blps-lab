@@ -47,5 +47,9 @@ public class AnswerService {
         }
         answerRepository.deleteById(answerId);
     }
+
+    public boolean isAnswerOwner(Long answerId, String authorEmail) {
+        return answerRepository.existsByIdAndAuthor(answerId, authorEmail);
+    }
 }
 

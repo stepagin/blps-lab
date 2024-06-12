@@ -18,16 +18,13 @@ public class GetIssueByIdDelegate implements JavaDelegate {
 
     @Override
     public void execute(DelegateExecution delegateExecution) throws Exception {
-        long id = (long) delegateExecution.getVariable("issue_id");
+        long id = Long.parseLong(String.valueOf(delegateExecution.getVariable("issue_id")));
 
         IssueDto issue = issueService.getIssueById(id);
         delegateExecution.setVariable("issue", issue);
         delegateExecution.setVariable("title", issue.getTitle());
         delegateExecution.setVariable("description", issue.getDescription());
-        delegateExecution.setVariable("date", issue.getDate().toString());
         delegateExecution.setVariable("author", issue.getAuthor());
         delegateExecution.setVariable("answers", issue.getAnswers().toString());
-        delegateExecution.setVariable("tags", issue.getTags().toString());
-
     }
 }
