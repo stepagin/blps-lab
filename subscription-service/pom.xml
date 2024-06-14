@@ -8,11 +8,11 @@
         <version>3.2.3</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>ru.stepagin</groupId>
-    <artifactId>blps</artifactId>
-    <version>1.1</version>
-    <name>blps</name>
-    <description>Business logic of software systems</description>
+    <groupId>com.annyarusova</groupId>
+    <artifactId>subscription-service</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>subscription-service</name>
+    <description>subscription-service</description>
     <properties>
         <java.version>17</java.version>
     </properties>
@@ -95,15 +95,26 @@
             <scope>runtime</scope>
         </dependency>
 
-        <!--        apache kafka-->
+        <!--		Kafka-->
         <dependency>
             <groupId>org.springframework.kafka</groupId>
             <artifactId>spring-kafka</artifactId>
         </dependency>
+
+        <!--        notification-->
         <dependency>
-            <groupId>org.springframework.kafka</groupId>
-            <artifactId>spring-kafka-test</artifactId>
-            <scope>test</scope>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-quartz</artifactId>
+            <version>3.2.4</version>
+        </dependency>
+        <dependency>
+            <groupId>org.quartz-scheduler</groupId>
+            <artifactId>quartz</artifactId>
+            <version>2.3.2</version>
         </dependency>
 
 

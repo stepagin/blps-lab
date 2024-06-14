@@ -1,5 +1,7 @@
-package ru.stepagin.blps.security;
+package com.annyarusova.subscriptionservice.config;
 
+import com.annyarusova.subscriptionservice.security.JwtFilter;
+import com.annyarusova.subscriptionservice.security.UserDetailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -25,7 +27,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfiguration {
     private final JwtFilter jwtFilter;
     private final UserDetailService userDetailService;
-    @Value(value = "${api.endpoints.base-url}")
+    @Value(value = "${api.endpoints.api-version}")
     private String baseUrl;
 
     @Bean
@@ -48,9 +50,6 @@ public class SecurityConfiguration {
 
                 .authorizeHttpRequests(registry -> {
                     registry.requestMatchers(baseUrl + "/api-docs").permitAll();
-                    registry.requestMatchers(baseUrl + "/auth/register").permitAll();
-                    registry.requestMatchers(baseUrl + "/auth/login").permitAll();
-                    registry.requestMatchers(baseUrl + "/auth/token").permitAll();
                     registry.anyRequest().authenticated();
                 })
                 .addFilterAfter(jwtFilter, UsernamePasswordAuthenticationFilter.class)

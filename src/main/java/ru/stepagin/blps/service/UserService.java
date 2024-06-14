@@ -16,13 +16,15 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
+    private final KafkaProducerService kafkaProducerService;
 
     public PersonDto register(RegistrationDto data) {
         if (userRepository.existsByLoginIgnoreCase(data.getLogin()))
             throw new IllegalArgumentException("Логин " + data.getLogin() + " уже занят");
         UserEntity user = new UserEntity(data.getLogin(), data.getPassword(), data.getUsername());
-
-        return PersonMapper.toDto(userRepository.save(user));
+        PersonDto personDto = PersonMapper.toDto(userRepository.save(user));
+        kafkaProducerService.sendUser(data.getLogin(), user);
+        return personDto;
     }
 
     public List<PersonDto> getAllUsers() {
